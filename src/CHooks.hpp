@@ -1,10 +1,10 @@
 /* =========================================
 
-		FCNPC - Fully Controllable NPC
-			----------------------
+        FCNPC - Fully Controllable NPC
+            ----------------------
 
-	- File: Hooks.hpp
-	- Author(s): OrMisicL
+    - File: Hooks.hpp
+    - Author(s): OrMisicL
 
   =========================================*/
 #ifndef HOOKS_H
@@ -13,7 +13,7 @@
 class CHooks
 {
 public:
-	static void InstallHooks();
+    static void InstallHooks();
 };
 
 #endif

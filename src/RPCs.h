@@ -44,20 +44,21 @@ extern int RPC_SetPlayerSkin;
 extern int RPC_HidePlayerForPlayer;
 extern int RPC_WorldPlayerDeath;
 
-enum PacketEnumeration : unsigned char {
-	ID_VEHICLE_SYNC = 200,
-	ID_AIM_SYNC = 203,
-	ID_BULLET_SYNC = 206,
-	ID_PLAYER_SYNC = 207,
-	ID_MARKERS_SYNC,
-	ID_UNOCCUPIED_SYNC = 209,
-	ID_TRAILER_SYNC = 210,
-	ID_PASSENGER_SYNC = 211,
-	ID_SPECTATOR_SYNC = 212,
-	ID_RCON_COMMAND = 201,
-	ID_RCON_RESPONCE,
-	ID_WEAPONS_UPDATE = 204,
-	ID_STATS_UPDATE = 205,
+enum PacketEnumeration : unsigned char
+{
+    ID_VEHICLE_SYNC = 200,
+    ID_AIM_SYNC = 203,
+    ID_BULLET_SYNC = 206,
+    ID_PLAYER_SYNC = 207,
+    ID_MARKERS_SYNC,
+    ID_UNOCCUPIED_SYNC = 209,
+    ID_TRAILER_SYNC = 210,
+    ID_PASSENGER_SYNC = 211,
+    ID_SPECTATOR_SYNC = 212,
+    ID_RCON_COMMAND = 201,
+    ID_RCON_RESPONCE,
+    ID_WEAPONS_UPDATE = 204,
+    ID_STATS_UPDATE = 205,
 };
 
 #endif

@@ -1,10 +1,10 @@
 /* =========================================
 
-		FCNPC - Fully Controllable NPC
-			----------------------
+        FCNPC - Fully Controllable NPC
+            ----------------------
 
-	- File: CMovePath.hpp
-	- Author(s): ziggi
+    - File: CMovePath.hpp
+    - Author(s): ziggi
 
   =========================================*/
 
@@ -16,18 +16,18 @@
 class CMovePath
 {
 public:
-	int Create();
-	bool Destroy(int iPathId);
-	bool IsPathValid(int iPathId);
-	std::map<int, CVector> *GetPoints(int iPathId);
+    int Create();
+    bool Destroy(int iPathId);
+    bool IsPathValid(int iPathId);
+    std::map<int, CVector>* GetPoints(int iPathId);
 
-	int AddPoint(int iPathId, const CVector &vecPoint);
-	bool RemovePoint(int iPathId, int iPointId);
-	bool IsPointValid(int iPathId, int iPointId);
-	CVector *GetPoint(int iPathId, int iPointId);
+    int AddPoint(int iPathId, const CVector& vecPoint);
+    bool RemovePoint(int iPathId, int iPointId);
+    bool IsPointValid(int iPathId, int iPointId);
+    CVector* GetPoint(int iPathId, int iPointId);
 
 private:
-	std::map<int, std::map<int, CVector>> m_mMovePath;
+    std::map<int, std::map<int, CVector>> m_mMovePath;
 };
 
 #endif

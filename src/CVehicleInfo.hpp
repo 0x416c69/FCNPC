@@ -1,10 +1,10 @@
 /* =========================================
 
-		FCNPC - Fully Controllable NPC
-			----------------------
+        FCNPC - Fully Controllable NPC
+            ----------------------
 
-	- File: VehicleInfo.hpp
-	- Author(s): ziggi
+    - File: VehicleInfo.hpp
+    - Author(s): ziggi
 
   =========================================*/
 
@@ -14,13 +14,13 @@
 class CVehicleInfo
 {
 public:
-	static bool IsValidPassengerSeat(BYTE byteSeatId, WORD wModelId);
-	static bool IsValidModel(WORD wModelId);
-	static WORD GetMaxPassengers(WORD wModelId);
-	static bool IsATrainLoco(WORD wModelId);
-	static bool IsATrainPart(WORD wModelId);
-	static bool IsAHydra(WORD wModelId);
-	static bool IsAPlane(WORD wModelId);
+    static bool IsValidPassengerSeat(BYTE byteSeatId, WORD wModelId);
+    static bool IsValidModel(WORD wModelId);
+    static WORD GetMaxPassengers(WORD wModelId);
+    static bool IsATrainLoco(WORD wModelId);
+    static bool IsATrainPart(WORD wModelId);
+    static bool IsAHydra(WORD wModelId);
+    static bool IsAPlane(WORD wModelId);
 };
 
 #endif

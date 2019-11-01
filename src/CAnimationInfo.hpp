@@ -1,10 +1,10 @@
 /* =========================================
 
-		FCNPC - Fully Controllable NPC
-			----------------------
+        FCNPC - Fully Controllable NPC
+            ----------------------
 
-	- File: AnimationInfo.hpp
-	- Author(s): ziggi
+    - File: AnimationInfo.hpp
+    - Author(s): ziggi
 
   =========================================*/
 
@@ -17,11 +17,11 @@
 class CAnimationInfo
 {
 public:
-	static char *GetNameByIndex(WORD wIndex);
-	static WORD GetIndexByName(char *szName);
+    static char* GetNameByIndex(WORD wIndex);
+    static WORD GetIndexByName(char* szName);
 
 private:
-	static char m_cAnimationsName[MAX_ANIMATIONS][36];
+    static char m_cAnimationsName[MAX_ANIMATIONS][36];
 };
 
 #endif

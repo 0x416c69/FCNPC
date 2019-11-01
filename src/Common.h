@@ -1,18 +1,18 @@
 /* =========================================
 
-		FCNPC - Fully Controllable NPC
-			----------------------
+        FCNPC - Fully Controllable NPC
+            ----------------------
 
-	- File: Common.h
-	- Author(s): OrMisicL
+    - File: Common.h
+    - Author(s): OrMisicL
 
   =========================================*/
 
 #ifndef COMMON_H
 #define COMMON_H
 
-// logprintf function defintion
-typedef void (* logprintf_t)(const char *szFormat, ...);
+  // logprintf function defintion
+typedef void (*logprintf_t)(const char* szFormat, ...);
 extern logprintf_t          logprintf;
 
 // Settings
@@ -75,19 +75,21 @@ extern logprintf_t          logprintf;
 #define MOVE_TYPE_SPRINT    2
 #define MOVE_TYPE_DRIVE     3
 // Movement mode
-enum MOVE_MODE {
-	MOVE_MODE_AUTO = -1,
-	MOVE_MODE_NONE = 0,
-	MOVE_MODE_COLANDREAS,
-	MOVE_MODE_SIZE,
+enum MOVE_MODE
+{
+    MOVE_MODE_AUTO = -1,
+    MOVE_MODE_NONE = 0,
+    MOVE_MODE_COLANDREAS,
+    MOVE_MODE_SIZE,
 };
 // Pathfinding mode
-enum MOVE_PATHFINDING {
-	MOVE_PATHFINDING_AUTO = -1,
-	MOVE_PATHFINDING_NONE = 0,
-	MOVE_PATHFINDING_Z,
-	MOVE_PATHFINDING_RAYCAST,
-	MOVE_PATHFINDING_SIZE,
+enum MOVE_PATHFINDING
+{
+    MOVE_PATHFINDING_AUTO = -1,
+    MOVE_PATHFINDING_NONE = 0,
+    MOVE_PATHFINDING_Z,
+    MOVE_PATHFINDING_RAYCAST,
+    MOVE_PATHFINDING_SIZE,
 };
 // Moving velocity
 #define MOVE_SPEED_AUTO     -1.0f
@@ -333,9 +335,9 @@ enum MOVE_PATHFINDING {
 
 // Hook functions
 #if defined(WIN32)
-	#define HOOK void _declspec(naked)
+#define HOOK void _declspec(naked)
 #elif defined(LINUX)
-	#define HOOK void __attribute__((naked))
+#define HOOK void __attribute__((naked))
 #endif
 
 #endif

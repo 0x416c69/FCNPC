@@ -1,10 +1,10 @@
 /* =========================================
 
-		FCNPC - Fully Controllable NPC
-			----------------------
+        FCNPC - Fully Controllable NPC
+            ----------------------
 
-	- File: Server.hpp
-	- Author(s): OrMisicL
+    - File: Server.hpp
+    - Author(s): OrMisicL
 
   =========================================*/
 
@@ -26,54 +26,54 @@ class CGangZonePool;
 class CServer
 {
 public:
-	CServer(eSAMPVersion version);
-	~CServer();
+    CServer(eSAMPVersion version);
+    ~CServer();
 
-	BYTE Initialize(AMX *pAMX);
-	void Process();
+    BYTE Initialize(AMX* pAMX);
+    void Process();
 
-	CPlayerManager *GetPlayerManager();
-	CNodeManager *GetNodeManager();
-	CRecordManager *GetRecordManager();
-	CMovePath *GetMovePath();
+    CPlayerManager* GetPlayerManager();
+    CNodeManager* GetNodeManager();
+    CRecordManager* GetRecordManager();
+    CMovePath* GetMovePath();
 
-	bool IsValidNickName(char *szName);
-	bool DoesNameExist(char *szName);
+    bool IsValidNickName(char* szName);
+    bool DoesNameExist(char* szName);
 
-	bool SetTickRate(int iRate);
-	int GetTickRate();
-	bool SetUpdateRate(DWORD dwRate);
-	DWORD GetUpdateRate();
+    bool SetTickRate(int iRate);
+    int GetTickRate();
+    bool SetUpdateRate(DWORD dwRate);
+    DWORD GetUpdateRate();
 
-	void ToggleCrashLogCreation(bool enabled);
-	bool GetCrashLogCreation();
+    void ToggleCrashLogCreation(bool enabled);
+    bool GetCrashLogCreation();
 
-	void ToggleMoveMode(int iMoveMode, bool bIsEnabled);
-	bool IsMoveModeEnabled(int iMoveMode);
-	void ToggleMovePathfinding(int iMovePathfinding, bool bIsEnabled);
-	bool IsMovePathfindingEnabled(int iMovePathfinding);
+    void ToggleMoveMode(int iMoveMode, bool bIsEnabled);
+    bool IsMoveModeEnabled(int iMoveMode);
+    void ToggleMovePathfinding(int iMovePathfinding, bool bIsEnabled);
+    bool IsMovePathfindingEnabled(int iMovePathfinding);
 
-	bool IsVehicleSeatOccupied(WORD wPlayerId, WORD wVehicleId, BYTE byteSeatId);
-	WORD GetVehicleSeatPlayerId(WORD wVehicleId, BYTE byteSeatId);
-	float GetVehicleAngle(CVehicle *pVehicle);
-	CVector GetVehiclePos(CVehicle *pVehicle);
-	CVector GetVehicleSeatPos(CVehicle *pVehicle, BYTE byteSeatId);
+    bool IsVehicleSeatOccupied(WORD wPlayerId, WORD wVehicleId, BYTE byteSeatId);
+    WORD GetVehicleSeatPlayerId(WORD wVehicleId, BYTE byteSeatId);
+    float GetVehicleAngle(CVehicle* pVehicle);
+    CVector GetVehiclePos(CVehicle* pVehicle);
+    CVector GetVehicleSeatPos(CVehicle* pVehicle, BYTE byteSeatId);
 
-	eSAMPVersion GetVersion();
+    eSAMPVersion GetVersion();
 
 private:
-	eSAMPVersion m_Version;
-	CPlayerManager *m_pPlayerDataManager;
-	CNodeManager *m_pNodeManager;
-	CRecordManager *m_pRecordManager;
-	CMovePath *m_pMovePath;
-	DWORD m_dwUpdateRate;
-	bool m_bCrashLogCreation;
-	bool m_bMoveModeEnabled[MOVE_MODE_SIZE];
-	bool m_bMovePathfindingEnabled[MOVE_PATHFINDING_SIZE];
+    eSAMPVersion m_Version;
+    CPlayerManager* m_pPlayerDataManager;
+    CNodeManager* m_pNodeManager;
+    CRecordManager* m_pRecordManager;
+    CMovePath* m_pMovePath;
+    DWORD m_dwUpdateRate;
+    bool m_bCrashLogCreation;
+    bool m_bMoveModeEnabled[MOVE_MODE_SIZE];
+    bool m_bMovePathfindingEnabled[MOVE_PATHFINDING_SIZE];
 
-	int m_iTicks;
-	int m_iTickRate;
+    int m_iTicks;
+    int m_iTickRate;
 };
 
 #endif

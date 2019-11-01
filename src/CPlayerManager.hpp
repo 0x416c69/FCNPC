@@ -1,10 +1,10 @@
 /* =========================================
 
-		FCNPC - Fully Controllable NPC
-			----------------------
+        FCNPC - Fully Controllable NPC
+            ----------------------
 
-	- File: PlayerManager.hpp
-	- Author(s): OrMisicL
+    - File: PlayerManager.hpp
+    - Author(s): OrMisicL
 
   =========================================*/
 
@@ -16,27 +16,27 @@
 class CPlayerManager
 {
 public:
-	CPlayerManager();
-	~CPlayerManager();
+    CPlayerManager();
+    ~CPlayerManager();
 
-	bool IsNpcConnected(WORD wPlayerId);
-	bool IsPlayerConnected(WORD wPlayerId);
-	WORD GetId(char *szName);
-	CPlayerData *GetAt(WORD wPlayerId);
-	bool SetupPlayer(WORD wPlayerId);
+    bool IsNpcConnected(WORD wPlayerId);
+    bool IsPlayerConnected(WORD wPlayerId);
+    WORD GetId(char* szName);
+    CPlayerData* GetAt(WORD wPlayerId);
+    bool SetupPlayer(WORD wPlayerId);
 
-	WORD AddPlayer(char *szName);
-	bool DeletePlayer(WORD wPlayerId);
-	bool ResetPlayer(WORD wPlayerId);
-	void ResetAllPlayers();
+    WORD AddPlayer(char* szName);
+    bool DeletePlayer(WORD wPlayerId);
+    bool ResetPlayer(WORD wPlayerId);
+    void ResetAllPlayers();
 
-	void Process();
+    void Process();
 
-	bool IsNPC(WORD wPlayerId);
-	std::vector<WORD> m_vNpcID;
+    bool IsNPC(WORD wPlayerId);
+    std::vector<WORD> m_vNpcID;
 
 private:
-	CPlayerData *m_pNpcArray[MAX_PLAYERS];
+    CPlayerData* m_pNpcArray[MAX_PLAYERS];
 };
 
 #endif

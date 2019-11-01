@@ -1,10 +1,10 @@
 /* =========================================
 
-		FCNPC - Fully Controllable NPC
-			----------------------
+        FCNPC - Fully Controllable NPC
+            ----------------------
 
-	- File: Playback.hpp
-	- Author(s): OrMisicL
+    - File: Playback.hpp
+    - Author(s): OrMisicL
 
   =========================================*/
 
@@ -18,22 +18,22 @@ class CPlayerData;
 class CPlayback
 {
 public:
-	CPlayback(char *szFile, char *szPlayingPath, bool bAutoUnload);
-	CPlayback(int iRecordId, bool bAutoUnload);
-	~CPlayback();
+    CPlayback(char* szFile, char* szPlayingPath, bool bAutoUnload);
+    CPlayback(int iRecordId, bool bAutoUnload);
+    ~CPlayback();
 
-	bool Initialize(const CVector &vecPoint, float *fQuaternion);
-	bool Process(CPlayerData *pPlayerData);
-	void UnloadRecord();
-	void SetPaused(bool bPaused);
+    bool Initialize(const CVector& vecPoint, float* fQuaternion);
+    bool Process(CPlayerData* pPlayerData);
+    void UnloadRecord();
+    void SetPaused(bool bPaused);
 
 private:
-	bool m_bAutoUnload;
-	int m_iRecordId;
-	int64_t m_dwStartTime;
-	bool m_bPaused;
-	Record_t m_recordData;
-	int m_iCurrentIndex;
+    bool m_bAutoUnload;
+    int m_iRecordId;
+    int64_t m_dwStartTime;
+    bool m_bPaused;
+    Record_t m_recordData;
+    int m_iCurrentIndex;
 };
 
 #endif

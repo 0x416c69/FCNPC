@@ -1,10 +1,10 @@
 /* =========================================
 
-		FCNPC - Fully Controllable NPC
-			----------------------
+        FCNPC - Fully Controllable NPC
+            ----------------------
 
-	- File: CRecordManager.hpp
-	- Author(s): ziggi
+    - File: CRecordManager.hpp
+    - Author(s): ziggi
 
   =========================================*/
 
@@ -13,24 +13,24 @@
 
 struct Record_t
 {
-	char szFile[MAX_PATH];
-	int iPlaybackType;
-	std::vector<int64_t> v_dwTime;
-	std::vector<CSyncData> v_playerSyncData;
-	std::vector<CVehicleSyncData> v_vehicleSyncData;
+    char szFile[MAX_PATH];
+    int iPlaybackType;
+    std::vector<int64_t> v_dwTime;
+    std::vector<CSyncData> v_playerSyncData;
+    std::vector<CVehicleSyncData> v_vehicleSyncData;
 };
 
 class CRecordManager
 {
 public:
-	int Load(char *szFile);
-	bool Unload(int iRecordId);
-	bool IsValid(int iRecordId);
-	int Find(char *szFile);
-	Record_t Get(int iRecordId);
+    int Load(char* szFile);
+    bool Unload(int iRecordId);
+    bool IsValid(int iRecordId);
+    int Find(char* szFile);
+    Record_t Get(int iRecordId);
 
 private:
-	std::vector<Record_t> m_vSyncData;
+    std::vector<Record_t> m_vSyncData;
 };
 
 #endif

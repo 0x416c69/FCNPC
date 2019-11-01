@@ -1,80 +1,83 @@
 /* =========================================
 
-		FCNPC - Fully Controllable NPC
-			----------------------
+        FCNPC - Fully Controllable NPC
+            ----------------------
 
-	- File: VehicleInfo.cpp
-	- Author(s): ziggi
+    - File: VehicleInfo.cpp
+    - Author(s): ziggi
 
   =========================================*/
 
 #include "Main.hpp"
 
-// thanks to MTA SA team for this array
+  // thanks to MTA SA team for this array
 static const BYTE wMaxPassengers[212] = {
-	3, 1, 1, 1, 3, 3, 0, 1, 1, 3, 1, 1, 1, 3, 1, 1,              // 400->415
-	3, 1, 3, 1, 3, 3, 1, 1, 1, 0, 3, 3, 3, 1, 0, 8,              // 416->431
-	0, 1, 1, 255, 1, 8, 3, 1, 3, 0, 1, 1, 1, 3, 0, 1,            // 432->447
-	0, 1, 255, 1, 0, 0, 0, 1, 1, 1, 3, 3, 1, 1, 1,               // 448->462
-	1, 1, 1, 3, 3, 1, 1, 3, 1, 0, 0, 1, 1, 0, 1, 1,              // 463->478
-	3, 1, 0, 3, 1, 0, 0, 0, 3, 1, 1, 3, 1, 3, 0, 1,              // 479->494
-	1, 1, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 0, 0,              // 495->510
-	1, 0, 0, 1, 1, 3, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1,              // 511->526
-	1, 1, 3, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 3, 1,                 // 527->541
-	1, 1, 1, 1, 3, 3, 1, 1, 3, 3, 1, 0, 1, 1, 1, 1,              // 542->557
-	1, 1, 3, 3, 1, 1, 0, 1, 3, 3, 0, 255, 1, 0, 0,               // 558->572
-	1, 0, 1, 1, 1, 1, 3, 3, 1, 3, 0, 255, 3, 1, 1, 1,            // 573->588
-	1, 255, 255, 1, 1, 1, 0, 3, 3, 3, 1, 1, 1, 1, 1,             // 589->604
-	3, 1, 255, 255, 255, 3, 255, 255
+    3, 1, 1, 1, 3, 3, 0, 1, 1, 3, 1, 1, 1, 3, 1, 1,              // 400->415
+    3, 1, 3, 1, 3, 3, 1, 1, 1, 0, 3, 3, 3, 1, 0, 8,              // 416->431
+    0, 1, 1, 255, 1, 8, 3, 1, 3, 0, 1, 1, 1, 3, 0, 1,            // 432->447
+    0, 1, 255, 1, 0, 0, 0, 1, 1, 1, 3, 3, 1, 1, 1,               // 448->462
+    1, 1, 1, 3, 3, 1, 1, 3, 1, 0, 0, 1, 1, 0, 1, 1,              // 463->478
+    3, 1, 0, 3, 1, 0, 0, 0, 3, 1, 1, 3, 1, 3, 0, 1,              // 479->494
+    1, 1, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 0, 0,              // 495->510
+    1, 0, 0, 1, 1, 3, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1,              // 511->526
+    1, 1, 3, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 3, 1,                 // 527->541
+    1, 1, 1, 1, 3, 3, 1, 1, 3, 3, 1, 0, 1, 1, 1, 1,              // 542->557
+    1, 1, 3, 3, 1, 1, 0, 1, 3, 3, 0, 255, 1, 0, 0,               // 558->572
+    1, 0, 1, 1, 1, 1, 3, 3, 1, 3, 0, 255, 3, 1, 1, 1,            // 573->588
+    1, 255, 255, 1, 1, 1, 0, 3, 3, 3, 1, 1, 1, 1, 1,             // 589->604
+    3, 1, 255, 255, 255, 3, 255, 255
 };                          // 605->611
 
 bool CVehicleInfo::IsValidPassengerSeat(BYTE byteSeatId, WORD wModelId)
 {
-	if (!IsValidModel(wModelId)) {
-		return false;
-	}
+    if (!IsValidModel(wModelId))
+    {
+        return false;
+    }
 
-	WORD maxPassengers = GetMaxPassengers(wModelId);
+    WORD maxPassengers = GetMaxPassengers(wModelId);
 
-	if (byteSeatId > maxPassengers || maxPassengers == 0xFF) {
-		return false;
-	}
+    if (byteSeatId > maxPassengers || maxPassengers == 0xFF)
+    {
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
 WORD CVehicleInfo::GetMaxPassengers(WORD wModelId)
 {
-	if (IsValidModel(wModelId)) {
-		return wMaxPassengers[wModelId - 400];
-	}
+    if (IsValidModel(wModelId))
+    {
+        return wMaxPassengers[wModelId - 400];
+    }
 
-	return 0xFF;
+    return 0xFF;
 }
 
 bool CVehicleInfo::IsValidModel(WORD wModelId)
 {
-	return wModelId >= 400 && wModelId <= 611;
+    return wModelId >= 400 && wModelId <= 611;
 }
 
 bool CVehicleInfo::IsATrainLoco(WORD wModelId)
 {
-	return wModelId == 537 || wModelId == 538;
+    return wModelId == 537 || wModelId == 538;
 }
 
 bool CVehicleInfo::IsATrainPart(WORD wModelId)
 {
-	return IsATrainLoco(wModelId) || wModelId == 570 || wModelId == 569 || wModelId == 449;
+    return IsATrainLoco(wModelId) || wModelId == 570 || wModelId == 569 || wModelId == 449;
 }
 
 bool CVehicleInfo::IsAHydra(WORD wModelId)
 {
-	return wModelId == 520;
+    return wModelId == 520;
 }
 
 bool CVehicleInfo::IsAPlane(WORD wModelId)
 {
-	return wModelId == 592 || wModelId == 577 || wModelId == 511 || wModelId == 512 || wModelId == 593
-		|| wModelId == 520 || wModelId == 553 || wModelId == 476 || wModelId == 519 || wModelId == 513
-		|| wModelId == 460;
+    return wModelId == 592 || wModelId == 577 || wModelId == 511 || wModelId == 512 || wModelId == 593
+        || wModelId == 520 || wModelId == 553 || wModelId == 476 || wModelId == 519 || wModelId == 513
+        || wModelId == 460;
 }

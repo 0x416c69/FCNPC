@@ -1,39 +1,39 @@
 /* =========================================
 
-		FCNPC - Fully Controllable NPC
-			----------------------
+        FCNPC - Fully Controllable NPC
+            ----------------------
 
-	- File: Main.hpp
-	- Author(s): OrMisicL
+    - File: Main.hpp
+    - Author(s): OrMisicL
 
   =========================================*/
 
-// OS includes
+  // OS includes
 #if defined(WIN32)
-	#include <windows.h>
-	#include <snprintf/snprintf.h>
+#include <windows.h>
+#include <snprintf/snprintf.h>
 
-	#pragma warning(disable : 4201 4206 4127 4100 4305 4127)
-	#define STDCALL __stdcall
-	#define THISCALL __thiscall
-	#define FASTCALL __fastcall
-	#define SN_TARGET_PS2
+#pragma warning(disable : 4201 4206 4127 4100 4305 4127)
+#define STDCALL __stdcall
+#define THISCALL __thiscall
+#define FASTCALL __fastcall
+#define SN_TARGET_PS2
 #elif defined(LINUX)
-	#include <pthread.h>
-	#include <unistd.h>
-	#include <sys/mman.h>
-	#include <fopen_s/fopen_s.h>
+#include <pthread.h>
+#include <unistd.h>
+#include <sys/mman.h>
+#include <fopen_s/fopen_s.h>
 
-	#define BOOL    int32_t
-	#define DWORD   uint32_t
-	#define BYTE    uint8_t
-	#define WORD    uint16_t
-	#define TRUE    (1)
-	#define FALSE   (0)
-	#define STDCALL
-	#define THISCALL
-	#define FASTCALL
-	#define MAX_PATH 260
+#define BOOL    int32_t
+#define DWORD   uint32_t
+#define BYTE    uint8_t
+#define WORD    uint16_t
+#define TRUE    (1)
+#define FALSE   (0)
+#define STDCALL
+#define THISCALL
+#define FASTCALL
+#define MAX_PATH 260
 #endif
 
 // Standard includes
@@ -89,10 +89,10 @@
 #include "Natives.hpp"
 
 // externals
-extern CServer      *pServer;
-extern void         **ppPluginData;
-extern CNetGame     *pNetGame;
-extern void         *pConsole;
-extern void         *pRakServer;
+extern CServer * pServer;
+extern void** ppPluginData;
+extern CNetGame* pNetGame;
+extern void* pConsole;
+extern void* pRakServer;
 extern char         szSampVersion[64];
 extern char         szSampClient[64];

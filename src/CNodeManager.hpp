@@ -1,10 +1,10 @@
 /* =========================================
 
-		FCNPC - Fully Controllable NPC
-			----------------------
+        FCNPC - Fully Controllable NPC
+            ----------------------
 
-	- File: NodeManager.hpp
-	- Author(s): OrMisicL
+    - File: NodeManager.hpp
+    - Author(s): OrMisicL
 
   =========================================*/
 
@@ -16,18 +16,18 @@
 class CNodeManager
 {
 public:
-	CNodeManager();
-	~CNodeManager();
+    CNodeManager();
+    ~CNodeManager();
 
-	bool IsNodeOpen(int iNodeId);
-	CNode *GetAt(int iNodeId);
+    bool IsNodeOpen(int iNodeId);
+    CNode* GetAt(int iNodeId);
 
-	bool OpenNode(int iNodeId);
-	void CloseNode(int iNodeId);
+    bool OpenNode(int iNodeId);
+    void CloseNode(int iNodeId);
 
 private:
-	bool m_bOpened[MAX_NODES];
-	CNode *m_pNode[MAX_NODES];
+    bool m_bOpened[MAX_NODES];
+    CNode* m_pNode[MAX_NODES];
 };
 
 #endif
