@@ -1021,15 +1021,7 @@ void CPlayerData::UpdateHeightPos(CVector *pvecPosition)
 	int iMoveMode = m_bPlayingNode ? m_iNodeMoveMode : m_iMoveMode;
 	float fNewZ = pvecPosition->fZ;
 
-	if (iMoveMode == MOVE_MODE_MAPANDREAS && pServer->GetMapAndreas()->IsInited()) {
-		if (pvecPosition->fZ < 0.0f) {
-			return;
-		}
-		float fZ = pServer->GetMapAndreas()->FindZ_For2DCoord(pvecPosition->fX, pvecPosition->fY);
-		if (fZ > 0.0f) {
-			fNewZ = fZ + 1.0f;
-		}
-	} else if (iMoveMode == MOVE_MODE_COLANDREAS && colDataLoaded) {
+	if (iMoveMode == MOVE_MODE_COLANDREAS) {
 		CVector vecResult;
 		CVector vecStart = *pvecPosition;
 		CVector vecEnd = *pvecPosition;
@@ -2627,13 +2619,13 @@ bool CPlayerData::UpdateNodePoint(WORD wPointId)
 bool CPlayerData::SetMoveMode(int iMoveMode)
 {
 	if (iMoveMode == MOVE_MODE_AUTO) {
-		if (pServer->IsMoveModeEnabled(MOVE_MODE_COLANDREAS)) {
-			m_iMoveMode = MOVE_MODE_COLANDREAS;
-			m_iNodeMoveMode = MOVE_MODE_COLANDREAS;
-		}  else if (pServer->IsMoveModeEnabled(MOVE_MODE_MAPANDREAS)) {
-			m_iMoveMode = MOVE_MODE_MAPANDREAS;
-			m_iNodeMoveMode = MOVE_MODE_MAPANDREAS;
-		} else {
+        if (pServer->IsMoveModeEnabled(MOVE_MODE_COLANDREAS))
+        {
+            m_iMoveMode = MOVE_MODE_COLANDREAS;
+            m_iNodeMoveMode = MOVE_MODE_COLANDREAS;
+        }
+        else
+        {
 			m_iMoveMode = MOVE_MODE_NONE;
 			m_iNodeMoveMode = MOVE_MODE_NONE;
 		}

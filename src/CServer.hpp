@@ -16,7 +16,6 @@ class RakServer;
 struct Packet;
 struct CVehicleSpawn;
 class CGangZonePool;
-class ColAndreasWorld;
 
 #include "CAddress.hpp"
 #include "CPlayerManager.hpp"
@@ -37,8 +36,6 @@ public:
 	CNodeManager *GetNodeManager();
 	CRecordManager *GetRecordManager();
 	CMovePath *GetMovePath();
-	CMapAndreas *GetMapAndreas();
-	ColAndreasWorld *GetColAndreas();
 
 	bool IsValidNickName(char *szName);
 	bool DoesNameExist(char *szName);
@@ -69,8 +66,6 @@ private:
 	CPlayerManager *m_pPlayerDataManager;
 	CNodeManager *m_pNodeManager;
 	CRecordManager *m_pRecordManager;
-	CMapAndreas *m_pMapAndreas;
-	ColAndreasWorld *m_pColAndreas;
 	CMovePath *m_pMovePath;
 	DWORD m_dwUpdateRate;
 	bool m_bCrashLogCreation;

@@ -71,26 +71,6 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 	set (CMAKE_SHARED_LINKER_FLAGS "-fshort-wchar -shared -static-libgcc -static-libstdc++")
 endif ()
 
-# Bullet
-set (BUILD_CPU_DEMOS OFF CACHE BOOL "Build original Bullet CPU examples")
-set (BUILD_BULLET2_DEMOS OFF CACHE BOOL "Set when you want to build the Bullet 2 demos")
-set (BUILD_EXTRAS OFF CACHE BOOL "Set when you want to build the extras")
-set (BUILD_OPENGL3_DEMOS OFF CACHE BOOL "Set when you want to build the OpenGL3+ demos")
-set (BUILD_UNIT_TESTS OFF CACHE BOOL "Build Unit Tests")
-add_subdirectory (
-	${CMAKE_CURRENT_SOURCE_DIR}/lib/bullet3
-)
-
-set (BULLET_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/lib/bullet3")
-find_path(BULLET_INCLUDE_DIRS NAMES btBulletCollisionCommon.h
-  HINTS
-    ${BULLET_ROOT}/include
-    ${BULLET_ROOT}/src
-  PATH_SUFFIXES bullet
-)
-
-# include (FindBullet)
-
 # subhook
 set (SUBHOOK_STATIC true)
 set (SUBHOOK_TESTS false)
@@ -103,7 +83,6 @@ include_directories (
 	${CMAKE_CURRENT_SOURCE_DIR}/src
 	${CMAKE_CURRENT_SOURCE_DIR}/lib
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/sdk/amx
-	${BULLET_INCLUDE_DIRS}
 )
 
 file (GLOB FCNPC_SRC
@@ -113,23 +92,6 @@ file (GLOB FCNPC_SRC
 	${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp
 )
 source_group("" FILES ${FCNPC_SRC})
-
-# MapAndreas
-file (GLOB MAPANDREAS_SRC
-	${CMAKE_CURRENT_SOURCE_DIR}/src/vendor/MapAndreas/*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/src/vendor/MapAndreas/*.h
-)
-source_group("${VENDOR_GROUP}MapAndreas" FILES ${MAPANDREAS_SRC})
-
-# ColAndreas
-set (CA_VERSION "v1.4.0")
-set (CA_DATABASE_VERSION 2)
-add_definitions (-DCA_VERSION="${CA_VERSION}" -DCA_DATABASE_VERSION=${CA_DATABASE_VERSION})
-file (GLOB COLANDREAS_SRC
-	${CMAKE_CURRENT_SOURCE_DIR}/src/vendor/ColAndreas/*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/src/vendor/ColAndreas/*.h
-)
-source_group("${VENDOR_GROUP}ColAndreas" FILES ${COLANDREAS_SRC})
 
 # SDK
 file (GLOB SDK_SRC
@@ -159,8 +121,6 @@ configure_file(src/FCNPC.inc.in ${CMAKE_CURRENT_SOURCE_DIR}/sampsvr_files/FCNPC.
 
 # Library
 add_library (${PROJECT_NAME} SHARED ${FCNPC_SRC}
-                                    ${MAPANDREAS_SRC}
-                                    ${COLANDREAS_SRC}
                                     ${EXPORTS_SRC}
                                     ${SDK_SRC}
                                     ${STRLCPY_SRC}
@@ -169,31 +129,5 @@ add_library (${PROJECT_NAME} SHARED ${FCNPC_SRC}
 
 target_link_libraries (${PROJECT_NAME}
 	subhook
-	BulletInverseDynamics
-	BulletSoftBody
-	BulletDynamics
-	BulletCollision
-	LinearMath
-	Bullet3Common
 	)
-
-# SAMP03DL
-add_library (${PROJECT_NAME}-DL SHARED ${FCNPC_SRC}
-                                       ${MAPANDREAS_SRC}
-                                       ${COLANDREAS_SRC}
-                                       ${EXPORTS_DL_SRC}
-                                       ${SDK_SRC}
-                                       ${STRLCPY_SRC}
-                                       ${RAKNET_SRC}
-                                       ${PLATFORM_SRC})
-set_target_properties (${PROJECT_NAME}-DL PROPERTIES COMPILE_FLAGS -DSAMP_03DL)
-
-target_link_libraries (${PROJECT_NAME}-DL
-	subhook
-	BulletInverseDynamics
-	BulletSoftBody
-	BulletDynamics
-	BulletCollision
-	LinearMath
-	Bullet3Common
-	)
+    

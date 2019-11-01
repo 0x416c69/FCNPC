@@ -78,7 +78,6 @@ extern logprintf_t          logprintf;
 enum MOVE_MODE {
 	MOVE_MODE_AUTO = -1,
 	MOVE_MODE_NONE = 0,
-	MOVE_MODE_MAPANDREAS,
 	MOVE_MODE_COLANDREAS,
 	MOVE_MODE_SIZE,
 };

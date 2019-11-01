@@ -24,8 +24,6 @@ CServer::CServer(eSAMPVersion version)
 	m_pNodeManager = NULL;
 	m_pMovePath = NULL;
 	m_pRecordManager = NULL;
-	m_pMapAndreas = NULL;
-	m_pColAndreas = NULL;
 	// Initialize the update rate
 	m_dwUpdateRate = DEFAULT_UPDATE_RATE;
 	// enable crashlog by default
@@ -49,8 +47,6 @@ CServer::~CServer()
 	SAFE_DELETE(m_pNodeManager);
 	SAFE_DELETE(m_pMovePath);
 	SAFE_DELETE(m_pRecordManager);
-	SAFE_DELETE(m_pMapAndreas);
-	SAFE_DELETE(m_pColAndreas);
 }
 
 BYTE CServer::Initialize(AMX *pAMX)
@@ -106,19 +102,6 @@ BYTE CServer::Initialize(AMX *pAMX)
 	// Create the record instance
 	m_pRecordManager = new CRecordManager;
 
-	// Create the MapAndreas instance
-	m_pMapAndreas = new CMapAndreas;
-
-	// Create the ColAndreas instance
-	m_pColAndreas = new ColAndreasWorld;
-	gCollisionWorld = m_pColAndreas;
-	if (gCollisionWorld->loadCollisionData()) {
-		logprintf("Loaded collision data.");
-		colDataLoaded = true;
-	} else {
-		logprintf("No collision data found.");
-	}
-
 	// Check the maxnpc from the config
 	if (CFunctions::GetMaxNPC() == 0) {
 		logprintf("[FCNPC] Warning: Unable to create NPCs. The maxnpc limit in server.cfg is 0.");
@@ -161,16 +144,6 @@ CNodeManager *CServer::GetNodeManager()
 CRecordManager *CServer::GetRecordManager()
 {
 	return m_pRecordManager;
-}
-
-CMapAndreas *CServer::GetMapAndreas()
-{
-	return m_pMapAndreas;
-}
-
-ColAndreasWorld *CServer::GetColAndreas()
-{
-	return m_pColAndreas;
 }
 
 CMovePath *CServer::GetMovePath()

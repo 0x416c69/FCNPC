@@ -48,12 +48,9 @@
 #include <array>
 #include <queue>
 #include <sstream>
-#include <btBulletDynamicsCommon.h>
 // Library includes
 #include <sdk/plugin.h>
 #include <raknet/BitStream.h>
-#include "vendor/MapAndreas/MapAndreas.h"
-#include "vendor/ColAndreas/DynamicWorld.h"
 #include <subhook/subhook.h>
 #include <strlcpy/strlcpy.h>
 // ExceptionHandler includes
@@ -90,8 +87,6 @@
 #include "CPlayerData.hpp"
 // Scripting includes
 #include "Natives.hpp"
-#include "vendor/MapAndreas/natives.h"
-#include "vendor/ColAndreas/Natives.h"
 
 // externals
 extern CServer      *pServer;
@@ -106,4 +101,3 @@ extern char         szSampVersion[64];
 extern char         szSampClient[64];
 
 extern bool colInit;
-extern bool colDataLoaded;

@@ -722,7 +722,7 @@ WORD CFunctions::GetClosestObjectInBetween(const CVector &vecHitOrigin, const CV
 
 	// Use ColAndreas when enabled
 	bool colCanSeparateMapAndCustomObjects = false;
-	if (iMode == ENTITY_MODE_COLANDREAS && colDataLoaded && colCanSeparateMapAndCustomObjects) {
+	if (iMode == ENTITY_MODE_COLANDREAS && colCanSeparateMapAndCustomObjects) {
 		// Even though bullets can penetrate water and still deal damage, we can't check for points beyond water
 		// Check for global objects only, not for custom objects or map points
 		// - Currently this is not supported, since ColAndreas can't distinguish between the map and global/custom objects
@@ -770,7 +770,7 @@ WORD CFunctions::GetClosestPlayerObjectInBetween(const CVector &vecHitOrigin, co
 
 	// Use ColAndreas when enabled
 	bool colCanSeparateMapAndCustomObjects = false;
-	if (iMode == ENTITY_MODE_COLANDREAS && colDataLoaded && colCanSeparateMapAndCustomObjects) {
+	if (iMode == ENTITY_MODE_COLANDREAS && colCanSeparateMapAndCustomObjects) {
 		// Even though bullets can penetrate water and still deal damage, we can't check for points beyond water
 		// Check for custom objects only, not for global objects or map points
 		// - Currently this is not supported, since ColAndreas can't distinguish between the map and global/custom objects
@@ -812,7 +812,7 @@ WORD CFunctions::GetClosestMapPointInBetween(const CVector &vecHitOrigin, const 
 	WORD wClosestMapPoint = 0;
 
 	// Use ColAndreas when enabled
-	if (iMode == ENTITY_MODE_COLANDREAS && colDataLoaded) {
+	if (iMode == ENTITY_MODE_COLANDREA) {
 		// Even though bullets can penetrate water and still deal damage, we can't check for points beyond water
 		// Check for map points only, not for global objects or custom objects
 		// - Currently this function checks for all of the above, since ColAndreas can't distinguish between the map and global/custom objects
