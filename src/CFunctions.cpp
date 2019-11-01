@@ -899,7 +899,7 @@ WORD CFunctions::GetClosestMapPointInBetween(const CVector& vecHitOrigin, const 
     WORD wClosestMapPoint = 0;
 
     // Use ColAndreas when enabled
-    if (iMode == ENTITY_MODE_COLANDREA)
+    if (iMode == ENTITY_MODE_COLANDREAS)
     {
         // Even though bullets can penetrate water and still deal damage, we can't check for points beyond water
         // Check for map points only, not for global objects or custom objects
@@ -923,22 +923,23 @@ WORD CFunctions::GetClosestMapPointInBetween(const CVector& vecHitOrigin, const 
     return wClosestMapPoint;
 }
 
-
+#pragma pack(push, 1)
 WORD CFunctions::RayCastLine(const CVector& vecStart, const CVector& vecEnd, CVector* vecResult)
 {
-    btVector3 Start = btVector3(btScalar(vecStart.fX + 0.00001), btScalar(vecStart.fY + 0.00001), btScalar(vecStart.fZ + 0.00001));
-    btVector3 End = btVector3(btScalar(vecEnd.fX), btScalar(vecEnd.fY), btScalar(vecEnd.fZ));
-    btVector3 Result;
+    Vector3 Start = Vector3(vecStart.fX + 0.00001f, vecStart.fY + 0.00001f, vecStart.fZ + 0.00001f);
+    Vector3 End = Vector3(vecEnd.fX, vecEnd.fY, vecEnd.fZ);
+    Vector3 Result;
     WORD wModel = 0;
 
-    if (pServer->GetColAndreas()->performRayTest(Start, End, Result, wModel))
+    if (pBPAPI)
     {
-        vecResult->fX = Result.getX();
-        vecResult->fY = Result.getY();
-        vecResult->fZ = Result.getZ();
-
-        return wModel;
+        if ((wModel = pBPAPI->RayCastLine(Start, End, Result)) != 0)
+        {
+            memcpy(vecResult, &Result, sizeof Vector3);
+            return wModel;
+        }
     }
 
     return 0;
 }
+#pragma pack(pop)

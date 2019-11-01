@@ -13,6 +13,8 @@
 extern CServer* pServer;
 extern CNetGame* pNetGame;
 
+CBulletPhysics* pBPAPI = nullptr;
+
 // native FCNPC_Create(const name[]);
 cell AMX_NATIVE_CALL CNatives::FCNPC_Create(AMX* amx, cell* params)
 {
@@ -4240,4 +4242,12 @@ cell AMX_NATIVE_CALL CNatives::FCNPC_HideInTabListForPlayer(AMX* amx, cell* para
 
     pPlayerData->RemoveForPlayer(wForPlayerId);
     return static_cast<int>(pPlayerData->AddForPlayer(wForPlayerId, true));
+}
+
+// native FCNPC_SetBPAPI(address);
+cell AMX_NATIVE_CALL CNatives::FCNPC_SetBPAPI(AMX* amx, cell* params)
+{
+    CHECK_PARAMS(1, "FCNPC_SetBPAPI");
+    pBPAPI = reinterpret_cast<CBulletPhysics*>(params[1]);
+    return 1;
 }

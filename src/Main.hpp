@@ -78,6 +78,8 @@
 #include "RPCs.h"
 // SA includes
 #include "CMaths.hpp"
+// BP
+#include "BPAPI.hpp"
 
 // Managers includes
 #include "CPlayerManager.hpp"
@@ -96,3 +98,5 @@ extern void* pConsole;
 extern void* pRakServer;
 extern char         szSampVersion[64];
 extern char         szSampClient[64];
+
+extern CBulletPhysics* pBPAPI;

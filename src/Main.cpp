@@ -295,6 +295,8 @@ AMX_NATIVE_INFO PluginNatives[] = {
     { "FCNPC_ShowInTabListForPlayer", CNatives::FCNPC_ShowInTabListForPlayer },
     { "FCNPC_HideInTabListForPlayer", CNatives::FCNPC_HideInTabListForPlayer },
 
+    {"FCNPC_SetBPAPI", CNatives::FCNPC_SetBPAPI},
+
     { 0, 0 }
 };
 

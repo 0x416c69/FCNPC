@@ -215,6 +215,8 @@ public:
 
     static cell AMX_NATIVE_CALL FCNPC_ShowInTabListForPlayer(AMX* amx, cell* params);
     static cell AMX_NATIVE_CALL FCNPC_HideInTabListForPlayer(AMX* amx, cell* params);
+
+    static cell AMX_NATIVE_CALL FCNPC_SetBPAPI(AMX* amx, cell* params);
 };
 
 #endif
