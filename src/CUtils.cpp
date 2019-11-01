@@ -60,13 +60,8 @@ uint32_t GetTick32()
     return Handle32Limit(GetTick());
 }
 
-#ifndef max
-#define max(a,b)            (((a) > (b)) ? (a) : (b))
-#endif
-
-#ifndef min
-#define min(a,b)            (((a) < (b)) ? (a) : (b))
-#endif
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#define min(a, b) (((a) < (b)) ? (a) : (b))
 
 void CUtils::GetPluginError(BYTE byteError, char* szError, size_t sSize)
 {
