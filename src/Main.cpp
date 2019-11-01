@@ -19,9 +19,6 @@ CServer      *pServer;
 bool         bServerInit = false;
 DWORD        dwStartTick;
 CNetGame     *pNetGame;
-#ifdef SAMP_03DL
-CArtInfo     *pArtInfo;
-#endif
 void         *pConsole = NULL;
 void         *pRakServer = NULL;
 char         szSampClient[64];
@@ -53,10 +50,6 @@ PLUGIN_EXPORT bool PLUGIN_CALL Load(void **ppData)
 		version = SAMP_VERSION_037_R2;
 		strlcpy(szSampVersion, "0.3.7 R2", sizeof(szSampVersion));
 		strlcpy(szSampClient, "SA-MP", sizeof(szSampClient));
-	} else if ((DWORD)logprintf == CAddress::FUNC_Logprintf_03DL_R1) {
-		version = SAMP_VERSION_03DL_R1;
-		strlcpy(szSampVersion, "0.3.DL R1", sizeof(szSampVersion));
-		strlcpy(szSampClient, "SA-MP", sizeof(szSampClient));
 	} else {
 		version = SAMP_VERSION_UNKNOWN;
 		strlcpy(szSampVersion, "Unknown", sizeof(szSampVersion));
@@ -77,17 +70,6 @@ PLUGIN_EXPORT bool PLUGIN_CALL Load(void **ppData)
 	logprintf("-------------------------------------------------");
 	logprintf("");
 	logprintf("Loading...");
-#ifdef SAMP_03DL
-	if (version != SAMP_VERSION_03DL_R1 && version != SAMP_VERSION_UNKNOWN) {
-		logprintf("[FCNPC] Error: Loading failed. This server requires the FCNPC version of the plugin, instead of the FCNPC-DL version.");
-		return false;
-	}
-#else
-	if (version == SAMP_VERSION_03DL_R1) {
-		logprintf("[FCNPC] Error: Loading failed. This server requires the FCNPC-DL version of the plugin, instead of the FCNPC version.");
-		return false;
-	}
-#endif
 	// Install the exception handler
 	CExceptionHandler::Install();
 	// Initialize linux tick count

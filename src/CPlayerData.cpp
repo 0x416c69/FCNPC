@@ -15,9 +15,6 @@ struct CPlayer;
 
 extern CServer  *pServer;
 extern CNetGame *pNetGame;
-#ifdef SAMP_03DL
-extern CArtInfo *pArtInfo;
-#endif
 
 CPlayerData::CPlayerData(WORD playerId, char *szName)
 {
@@ -1153,41 +1150,15 @@ void CPlayerData::SetSkin(int iSkin, bool bSendRPC)
 	}
 
 	// Validate the skin
-	if (iSkin > 311 || iSkin < 0 || iSkin == 74) {
-#ifdef SAMP_03DL
-		if (iSkin <= 20000 || iSkin > 30000) {
-			return;
-		}
-#else
-		return;
-#endif
-	}
+    if (iSkin > 311 || iSkin < 0 || iSkin == 74) return;
 
-#ifdef SAMP_03DL
-	int iBaseId = CFunctions::GetSkinBaseID(iSkin);
-	if (iSkin > 20000 && iBaseId != -1) {
-		m_pPlayer->spawn.iSkin = iBaseId;
-		m_pPlayer->spawn.dwCustomSkin = iSkin;
-	} else {
-		m_pPlayer->spawn.iSkin = iSkin;
-		m_pPlayer->spawn.dwCustomSkin = 0;
-	}
-#else
 	m_pPlayer->spawn.iSkin = iSkin;
-#endif
 
 	// Send RPC
 	if (bSendRPC && m_pPlayer->bReadyToSpawn) {
 		RakNet::BitStream bsData;
-#ifdef SAMP_03DL
-		bsData.Write(m_pPlayer->wPlayerId);
-#else
 		bsData.Write(static_cast<DWORD>(m_pPlayer->wPlayerId));
-#endif
 		bsData.Write(m_pPlayer->spawn.iSkin);
-#ifdef SAMP_03DL
-		bsData.Write(m_pPlayer->spawn.dwCustomSkin);
-#endif
 		CFunctions::AddedPlayersRPC(&RPC_SetPlayerSkin, &bsData, m_wPlayerId);
 	}
 }
@@ -1196,13 +1167,6 @@ int CPlayerData::GetSkin()
 {
 	return m_pPlayer->spawn.iSkin;
 }
-
-#ifdef SAMP_03DL
-int CPlayerData::GetCustomSkin()
-{
-	return m_pPlayer->spawn.dwCustomSkin;
-}
-#endif
 
 void CPlayerData::SetInterior(int iInterior)
 {

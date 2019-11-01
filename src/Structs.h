@@ -58,11 +58,7 @@
 #define INVALID_VEHICLE_ID (0xFFFF)
 #define INVALID_ACTOR_ID (0xFFFF)
 #define NO_TEAM (255)
-#ifndef SAMP_03DL
 #define MAX_OBJECTS (1000)
-#else
-#define MAX_OBJECTS (2000)
-#endif
 #define INVALID_OBJECT_ID (0xFFFF)
 #define MAX_GANG_ZONES (1024)
 #define MAX_TEXT_DRAWS (2048)
@@ -488,20 +484,13 @@ struct CPlayerSpawnInfo
 { //-V802
 	BYTE			byteTeam;				// 0 - 1
 	int				iSkin;					// 1 - 5
-#ifdef SAMP_03DL
-	DWORD			dwCustomSkin;
-#endif
 	BYTE			unk;					// 5 - 6
 	CVector			vecPos;					// 6 - 18
 	float			fRotation;				// 18 - 22
 	int				iSpawnWeapons[3];		// 22 - 34
 	int				iSpawnWeaponsAmmo[3];	// 34 - 46
 };
-#ifndef SAMP_03DL
 static_assert(sizeof(CPlayerSpawnInfo) == 46, "Invalid CPlayerSpawnInfo size");
-#else
-static_assert(sizeof(CPlayerSpawnInfo) == 50, "Invalid CPlayerSpawnInfo size");
-#endif
 
 struct CBulletSyncData
 { //-V802
@@ -551,9 +540,6 @@ struct CPlayer
 	BYTE					byteStreamedIn[MAX_PLAYERS];				// 341 - 1341
 	BYTE					byteVehicleStreamedIn[MAX_VEHICLES];		// 1341 - 3341
 	BYTE					byteSomethingUnused[1000];					// 3341 - 4341
-#ifdef SAMP_03DL
-	BYTE					byteSomethingUnused2[1000];					// 4341 - 5341
-#endif
 	BYTE					byte3DTextLabelStreamedIn[1024];			// 4341  - 5365
 	BYTE					bPickupStreamedIn[MAX_PICKUPS];				// 5365 - 9461
 	BYTE					byteActorStreamedIn[MAX_PLAYERS];			// 9461 - 10461
@@ -579,9 +565,6 @@ struct CPlayer
 	WORD					wUDAnalog;			// 10571
 	DWORD					dwKeys;				// 10573 - 10577
 	DWORD					dwOldKeys;			// 10577 - 10581
-#ifdef SAMP_03DL
-	DWORD					dwUnknown1;			// 11581 - 11585
-#endif
 	BOOL					bEditObject;		// 10581 - 10585
 	BOOL					bEditAttachedObject;// 10585 - 10589
 	WORD					wDialogID;			// 10589 - 10591
@@ -632,31 +615,18 @@ struct CPlayer
 	BYTE					byteSpectateType;	// 11452 - 11453
 	DWORD					wSpectateID;		// 11453 - 11457
 	DWORD					dwLastStreaming;	// 11457 - 11461
-#ifdef SAMP_03DL
-	BYTE					byteDownloadingStatus; // 12469 - 12470
-#endif
 	DWORD					dwNPCRecordingType;	// 11461 - 11465
 	FILE					*pRecordingFile;	// 11465 - 11469
 	DWORD					dwFirstNPCWritingTime; // 11469 - 11473 
 	PAD(unused, 9);								// 11473 - 11482
 	CPlayerVar*				pPlayerVars;		// 11482 - 11486
-#ifdef SAMP_03DL
-	DWORD					dwUnknown3;			// 12495 - 12499
-#endif
 };
-#ifndef SAMP_03DL
 static_assert(sizeof(CPlayer) == 11486, "Invalid CPlayer size");
-#else
-static_assert(sizeof(CPlayer) == 12499, "Invalid CPlayer size");
-#endif
 
 struct CPlayerPool
 {
 	DWORD					dwVirtualWorld[MAX_PLAYERS];				// 0 - 4000
 	DWORD					dwPlayersCount;								// 4000 - 4004
-#ifdef SAMP_03DL
-	PAD(pad1, 1000);
-#endif
 	DWORD					dwlastMarkerUpdate;							// 4004 - 4008
 	float					fUpdatePlayerGameTimers;					// 4008 - 4012
 	DWORD					dwScore[MAX_PLAYERS];						// 4012 - 8012
@@ -676,11 +646,7 @@ struct CPlayerPool
 	DWORD					dwPlayerPoolSize;							// 199016 - 199020
 	DWORD					dwUnk;										// 199020 - 199024
 };
-#ifndef SAMP_03DL
 static_assert(sizeof(CPlayerPool) == 199024, "Invalid CPlayerPool size");
-#else
-static_assert(sizeof(CPlayerPool) == 200024, "Invalid CPlayerPool size");
-#endif
 
 /* -------------------------------------------------------- */
 // CVehicle
@@ -844,12 +810,7 @@ struct CObjectPool
 	BOOL			bObjectSlotState[MAX_OBJECTS];						// 8.004.000
 	CObject			*pObjects[MAX_OBJECTS];								// 8.008.000
 };
-
-#ifndef SAMP_03DL
 static_assert(sizeof(CObjectPool) == 8012000, "Invalid CObjectPool size");
-#else
-static_assert(sizeof(CObjectPool) == 16024000, "Invalid CObjectPool size");
-#endif
 
 /* -------------------------------------------------------- */
 // CMenu
@@ -1042,9 +1003,6 @@ struct CNetGame
 	BYTE					bLimitPlayerMarkers;	// 121 - 122
 	float					fPlayerMarkesLimit;		// 122 - 126 
 	BOOL					bVehicleFriendlyFire;	// 126 - 130
-#ifdef SAMP_03DL
-	DWORD					dwUnk3;					// 130 - 134
-#endif
 #ifndef _WIN32
 	double					dElapsedTime;			// size = 8
 #endif
@@ -1052,54 +1010,9 @@ struct CNetGame
 	CPlayerSpawnInfo		AvailableSpawns[319];	// 134 - 14808
 };
 #ifdef _WIN32
-#ifndef SAMP_03DL
 static_assert(sizeof(CNetGame) == 14808, "Invalid CNetGame size");
 #else
-static_assert(sizeof(CNetGame) == 16088, "Invalid CNetGame size");
-#endif
-#else
-#ifndef SAMP_03DL
 static_assert(sizeof(CNetGame) == 14816, "Invalid CNetGame size");
-#else
-static_assert(sizeof(CNetGame) == 16096, "Invalid CNetGame size");
-#endif
-#endif
-
-#ifdef SAMP_03DL
-enum MODEL_TYPE : BYTE { MODEL_TYPE_CHAR = 1, MODEL_TYPE_SIMPLE = 2 };
-static_assert(sizeof(MODEL_TYPE) == 1, "Invalid MODEL_TYPE size");
-
-struct CModelInfo
-{
-	MODEL_TYPE bType;				// 0 - 1
-	DWORD dwVirtualWorld;			// 1 - 5
-	DWORD dwBaseId;					// 5 - 9
-	DWORD dwNewId;					// 9 - 13
-	char szDffName[MAX_PATH + 1];	// 13 - 274
-	char szTxdName[MAX_PATH + 1];	// 274 - 535
-	DWORD dwDffCrc;					// 535 - 539
-	DWORD dwTxdCrc;					// 539 - 543
-	DWORD dwDffLength;				// 543 - 547
-	DWORD dwTxdLength;				// 547 - 551
-	BYTE bTimeOn;					// 551 - 552
-	BYTE bTimeOff;					// 552 - 553
-};
-static_assert(sizeof(CModelInfo) == 553, "Invalid CModelInfo size");
-
-struct CArtList
-{
-	CModelInfo **pModelList;	// 0 - 4
-	DWORD dwCapacity;				// 4 - 8
-};
-static_assert(sizeof(CArtList) == 8, "Invalid CArtList size");
-
-struct CArtInfo
-{
-	char szArtPath[MAX_PATH];	// 0 - 260
-	BYTE bUnknown;				// 260 - 261
-	CArtList artList;			// 261 - 269
-};
-static_assert(sizeof(CArtInfo) == 269, "Invalid CArtInfo size");
 #endif
 
 #pragma pack(pop)

@@ -92,9 +92,6 @@
 extern CServer      *pServer;
 extern void         **ppPluginData;
 extern CNetGame     *pNetGame;
-#ifdef SAMP_03DL
-extern CArtInfo     *pArtInfo;
-#endif
 extern void         *pConsole;
 extern void         *pRakServer;
 extern char         szSampVersion[64];

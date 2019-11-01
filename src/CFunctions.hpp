@@ -49,10 +49,6 @@ public:
 	static WORD GetMaxPlayers();
 	static WORD GetMaxNPC();
 
-#ifdef SAMP_03DL
-	static int GetSkinBaseID(DWORD dwSkinId);
-#endif
-
 	static void GlobalRPC(int* szUniqueID, RakNet::BitStream* bsParams, WORD wExcludePlayerId = INVALID_PLAYER_ID, char PacketStream = 2);
 	static void AddedPlayersRPC(int* szUniqueID, RakNet::BitStream* bsParams, WORD wPlayerId, char PacketStream = 2);
 	static void AddedVehicleRPC(int* szUniqueID, RakNet::BitStream* bsParams, WORD wVehicleId, WORD wExcludePlayerId = INVALID_PLAYER_ID, char PacketStream = 2);

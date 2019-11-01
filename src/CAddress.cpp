@@ -13,10 +13,8 @@
 
 #if defined(WIN32)
 DWORD CAddress::FUNC_Logprintf_037_R2 = 0x0048C8D0;
-DWORD CAddress::FUNC_Logprintf_03DL_R1 = 0x00491fa0;
 #elif defined(LINUX)
 DWORD CAddress::FUNC_Logprintf_037_R2 = 0x080A91D0;
-DWORD CAddress::FUNC_Logprintf_03DL_R1 = 0x080b1ca0;
 #endif
 
 // Functions
@@ -33,9 +31,6 @@ DWORD CAddress::FUNC_ClientJoin_RPC = 0;
 // Variables
 DWORD CAddress::VAR_ServerAuthentication = 0;
 DWORD CAddress::VAR_NetVersion = 0;
-#ifdef SAMP_03DL
-DWORD CAddress::VAR_ArtInfo = 0;
-#endif
 
 // Offsets
 DWORD CAddress::OFFSET_RemoteSystemManager = 0;
@@ -111,36 +106,6 @@ void CAddress::Initialize(eSAMPVersion sampVersion)
 			FUNC_CGameMode__OnGameModeExit = 0x46adc0;
 			break;
 
-		case SAMP_VERSION_03DL_R1:
-			FUNC_CPlayerPool__DeletePlayer = 0x466550;
-			FUNC_CPlayer__Kill = 0x485020;
-			FUNC_CPlayer__EnterVehicle = 0x485670;
-			FUNC_CPlayer__ExitVehicle = 0x485790;
-			FUNC_CPlayer__SpawnForWorld = 0x487730;
-			FUNC_GetVehicleModelInfo = 0x4892a0;
-			FUNC_CConsole__GetIntVariable = 0x490c80;
-			FUNC_ClientJoin_RPC = 0x497ef0;
-
-			VAR_ServerAuthentication = 0x4fc470;
-			VAR_NetVersion = 0xfde;
-#ifdef SAMP_03DL
-			VAR_ArtInfo = 0x4fc444;
-#endif
-
-			OFFSET_RemoteSystemManager = 0x33c;
-			OFFSET_RemoteSystemSize = 0xcb8;
-			OFFSET_RemoteSystem__ConnectMode = 0xcb0;
-			OFFSET_RemoteSystem__Unknown = 0xcb5;
-
-			// callbacks
-			FUNC_CGameMode__OnPlayerGiveDamage = 0x46f050;
-			FUNC_CGameMode__OnPlayerTakeDamage = 0x46efd0;
-			FUNC_CGameMode__OnPlayerWeaponShot = 0x46f640;
-			FUNC_CGameMode__OnPlayerStreamIn = 0x46ebc0;
-			FUNC_CGameMode__OnPlayerStreamOut = 0x46ec30;
-			FUNC_CGameMode__OnGameModeExit = 0x46da90;
-			break;
-
 		case SAMP_VERSION_UNKNOWN:
 			// Functions
 			FUNC_CPlayerPool__DeletePlayer = CUtils::FindPattern("\x8B\x44\x24\x10\x64\x89\x25\x00\x00\x00\x00\x81\xEC\x20\x01\x00\x00\x66\x3D\xE8\x03\x53", "xxxxxxxxxxxxxxxxxxxxxx") - 0xE;
@@ -155,9 +120,6 @@ void CAddress::Initialize(eSAMPVersion sampVersion)
 			// Variables
 			VAR_ServerAuthentication = *(DWORD *)(CUtils::FindPattern("\x8B\x4C\x24\x28\xA1\xE8\x5F\x4F\x00\x81\xF1\xD9\x0F\x00\x00\x3B\xC1", "xxxxx????xx????xx") + 5);
 			VAR_NetVersion = *(DWORD *)(CUtils::FindPattern("\x8B\x4C\x24\x28\xA1\xE8\x5F\x4F\x00\x81\xF1\xD9\x0F\x00\x00\x3B\xC1", "xxxxx????xx????xx") + 11);
-#ifdef SAMP_03DL
-			VAR_ArtInfo = *(DWORD *)(CUtils::FindPattern("\xA3\x44\xC4\x4F\x00\xE8\x80\x4A\x00\x00\x68\xD8\x3E\x00\x00\xE8\xC7\xE6\x00\x00", "xxxxxxxxxxxxxxxxxxxx") + 1);
-#endif
 
 			// Offsets
 			OFFSET_RemoteSystemManager = *(DWORD *)(CUtils::FindPattern("\x8B\x96\x3C\x03\x00\x00\x8A\x0C\x17\x84\xC9\x8D\x04\x17", "xx????xx?xxxx?") + 2);
@@ -232,36 +194,6 @@ void CAddress::Initialize(eSAMPVersion sampVersion)
 			FUNC_CGameMode__OnGameModeExit = 0x80A4DB0;
 			break;
 
-		case SAMP_VERSION_03DL_R1:
-			FUNC_CPlayerPool__DeletePlayer = 0x80dc0b0;
-			FUNC_CPlayer__Kill = 0x80d5ac0;
-			FUNC_CPlayer__EnterVehicle = 0x80d6a70;
-			FUNC_CPlayer__ExitVehicle = 0x80d6bf0;
-			FUNC_CPlayer__SpawnForWorld = 0x80d7870;
-			FUNC_GetVehicleModelInfo = 0x80e14f0;
-			FUNC_CConsole__GetIntVariable = 0x80a87d0;
-			FUNC_ClientJoin_RPC = 0x80ba350;
-
-			VAR_ServerAuthentication = 0x81b7d2c;
-			VAR_NetVersion = 0xfde;
-#ifdef SAMP_03DL
-			VAR_ArtInfo = 0x81d7934;
-#endif
-
-			OFFSET_RemoteSystemManager = 0x334;
-			OFFSET_RemoteSystemSize = 0xc69;
-			OFFSET_RemoteSystem__ConnectMode = 0xc62;
-			OFFSET_RemoteSystem__Unknown = 0xc67;
-
-			// callbacks
-			FUNC_CGameMode__OnPlayerGiveDamage = 0x80AF380;
-			FUNC_CGameMode__OnPlayerTakeDamage = 0x80AF2D0;
-			FUNC_CGameMode__OnPlayerWeaponShot = 0x80AFC60;
-			FUNC_CGameMode__OnPlayerStreamIn = 0x80AEE10;
-			FUNC_CGameMode__OnPlayerStreamOut = 0x80AEE90;
-			FUNC_CGameMode__OnGameModeExit = 0x80AD770;
-			break;
-
 		case SAMP_VERSION_UNKNOWN:
 			// Functions
 			FUNC_CPlayerPool__DeletePlayer = CUtils::FindPattern("\x55\x89\xE5\x81\xEC\x68\x01\x00\x00\x89\x5D\xF4\x0F\xB7\x5D\x0C\x0F\xB6\x45\x10", "xxxxxxxxxxxxxxxxxxx");
@@ -276,9 +208,6 @@ void CAddress::Initialize(eSAMPVersion sampVersion)
 			// Variables
 			VAR_ServerAuthentication = *(DWORD *)(CUtils::FindPattern("\x8B\x85\x7C\xFC\xFF\xFF\x35", "xxxxxxx") + 13);
 			VAR_NetVersion = *(DWORD *)(CUtils::FindPattern("\x8B\x85\x7C\xFC\xFF\xFF\x35", "xxxxxxx") + 7);
-#ifdef SAMP_03DL
-			VAR_ArtInfo = *(DWORD *)(CUtils::FindPattern("\x89\x3D\x34\x79\x1D\x08\xB8\xCD\x5D\x16\x08\x89\x44\x24\x04\x89\x3C\x24", "xxxxxxxxxxxxxxxxxx") + 1);
-#endif
 
 			// Offsets
 			OFFSET_RemoteSystemManager = *(DWORD *)(CUtils::FindPattern("\x8B\x87\x34\x03\x00\x00\x80\x3C\x03\x00\x74\xE6\x8D\x55\x0C\x8D\x44\x18\x01\x89\x54\x24\x04", "xx????xxxxx?xxxxxxxxxxx") + 2);

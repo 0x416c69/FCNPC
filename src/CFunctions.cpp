@@ -29,10 +29,6 @@ RakNet__GetIndexFromPlayerID_t  CFunctions::pfn__RakNet__GetIndexFromPlayerID = 
 
 void CFunctions::Initialize()
 {
-#ifdef SAMP_03DL
-	pArtInfo = *reinterpret_cast<CArtInfo**>(CAddress::VAR_ArtInfo);
-#endif
-
 	// Initialize function pointers
 	pfn__CPlayerPool__DeletePlayer = (CPlayerPool__DeletePlayer_t)(CAddress::FUNC_CPlayerPool__DeletePlayer);
 	pfn__CPlayer__SpawnForWorld = (CPlayer__SpawnForWorld_t)(CAddress::FUNC_CPlayer__SpawnForWorld);
@@ -159,23 +155,6 @@ WORD CFunctions::GetMaxNPC()
 {
 	return static_cast<WORD>(pfn__CConsole__GetIntVariable(pConsole, "maxnpc"));
 }
-
-#ifdef SAMP_03DL
-int CFunctions::GetSkinBaseID(DWORD dwSkinId)
-{
-	if (pArtInfo->artList.dwCapacity == 0) {
-		return -1;
-	}
-
-	for (uint32_t i = 0; i < pArtInfo->artList.dwCapacity; i++) {
-		if (pArtInfo->artList.pModelList[i]->dwNewId == dwSkinId) {
-			return pArtInfo->artList.pModelList[i]->dwBaseId;
-		}
-	}
-
-	return -1;
-}
-#endif
 
 void CFunctions::GlobalRPC(int* szUniqueID, RakNet::BitStream* bsParams, WORD wExcludePlayerId, char PacketStream)
 {
