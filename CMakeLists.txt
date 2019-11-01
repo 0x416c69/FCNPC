@@ -18,6 +18,8 @@ set (CMAKE_MINSIZEREL_POSTFIX "")
 
 set (LIBRARY_GROUP "lib\\")
 
+set (CMAKE_CXX_STANDARD 14)
+
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 	add_definitions (-DWIN32 -D_WIN32 -D__STDC__ -DSYSTEM_NAME="Windows")
 

@@ -935,7 +935,7 @@ WORD CFunctions::RayCastLine(const CVector& vecStart, const CVector& vecEnd, CVe
     {
         if ((wModel = pBPAPI->RayCastLine(Start, End, Result)) != 0)
         {
-            memcpy(vecResult, &Result, sizeof Vector3);
+            memcpy(vecResult, &Result, sizeof(Vector3));
             return wModel;
         }
     }

@@ -9,6 +9,9 @@
   =========================================*/
 
 #include "Main.hpp"
+
+#undef min
+#undef max
 #include <chrono>
 #include <fstream>
 
@@ -56,6 +59,14 @@ uint32_t GetTick32()
 {
     return Handle32Limit(GetTick());
 }
+
+#ifndef max
+#define max(a,b)            (((a) > (b)) ? (a) : (b))
+#endif
+
+#ifndef min
+#define min(a,b)            (((a) < (b)) ? (a) : (b))
+#endif
 
 void CUtils::GetPluginError(BYTE byteError, char* szError, size_t sSize)
 {
