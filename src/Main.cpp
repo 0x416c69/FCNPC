@@ -67,12 +67,10 @@ PLUGIN_EXPORT bool PLUGIN_CALL Load(void **ppData)
 	logprintf("-------------------------------------------------");
 	logprintf("");
 	logprintf("Loading...");
+
 	// Install the exception handler
 	CExceptionHandler::Install();
-	// Initialize linux tick count
-#if defined(LINUX)
-	LoadTickCount();
-#endif
+
 	// Create the server instance
 	pServer = new CServer(version);
 
