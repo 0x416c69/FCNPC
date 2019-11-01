@@ -16,6 +16,8 @@ struct CPlayer;
 extern CServer  *pServer;
 extern CNetGame *pNetGame;
 
+#pragma warning(push)
+#pragma warning(disable:26495)
 CPlayerData::CPlayerData(WORD playerId, char *szName)
 {
 	// Save the player id
@@ -103,6 +105,7 @@ CPlayerData::CPlayerData(WORD playerId, char *szName)
 	m_pPlayer = NULL;
 	SetPlayingPlaybackPath((char *)"npcmodes/recordings/");
 }
+#pragma warning(pop)
 
 CPlayerData::~CPlayerData()
 {
@@ -156,7 +159,7 @@ bool CPlayerData::Setup()
 	m_pPlayer->spawn.byteTeam = NO_TEAM;
 
 	// Initialize the update tick
-	m_dwUpdateTick = GetTickCount();
+	m_dwUpdateTick = GetTick();
 	return true;
 }
 
@@ -301,7 +304,7 @@ void CPlayerData::Update(int iState)
 	}
 
 	// Check the time spent since the last update
-	DWORD dwThisTick = GetTickCount();
+    int64_t dwThisTick = GetTick();
 
 	if ((dwThisTick - m_dwUpdateTick) < pServer->GetUpdateRate()) {
 		return;
@@ -350,12 +353,12 @@ void CPlayerData::Update(int iState)
 		// Set the vehicle occupied data
 		if (pVehicle->bOccupied) {
 			m_pPlayer->vehicleSyncData.fHealth = pVehicle->fHealth;
-			pVehicle->vehOccupiedTick = dwThisTick;
+			pVehicle->vehOccupiedTick = Handle32Limit(dwThisTick);
 		}
 
 		if (pVehicle->fHealth < 250.0f) {
 			if (m_dwVehicleDeadTick == 0) {
-				m_dwVehicleDeadTick = GetTickCount();
+				m_dwVehicleDeadTick = GetTick();
 			} else {
 				if (!pVehicle->bDead && (dwThisTick - m_dwVehicleDeadTick) > 5000) {
 					Kill(pVehicle->wKillerID, 255);
@@ -678,7 +681,7 @@ void CPlayerData::Process()
 	}
 
 	// get data
-	DWORD dwThisTick = GetTickCount();
+    int64_t dwThisTick = GetTick();
 	DWORD dwUpdateRate = pServer->GetUpdateRate();
 	BYTE byteState = GetState();
 
@@ -687,7 +690,7 @@ void CPlayerData::Process()
 		// check on vehicle
 		if (byteState == PLAYER_STATE_DRIVER || byteState == PLAYER_STATE_PASSENGER) {
 			RemoveFromVehicle();
-			m_dwKillVehicleTickCount = dwThisTick;
+			m_dwKillVehicleTickCount = Handle32Limit(dwThisTick);
 		}
 
 		// Kill the player
@@ -718,7 +721,7 @@ void CPlayerData::Process()
 			SetState(PLAYER_STATE_ONFOOT);
 			SetVehicle(INVALID_VEHICLE_ID, 0);
 		} else if (m_bMoving) {
-			DWORD dwMoveTick = dwThisTick - m_dwMoveStartTime;
+			int64_t dwMoveTick = dwThisTick - m_dwMoveStartTime;
 
 			if (dwMoveTick < m_dwMoveTime) {
 				CVector vecNewPosition;
@@ -727,9 +730,9 @@ void CPlayerData::Process()
 				GetPosition(&vecNewPosition);
 				GetVelocity(&vecVelocity);
 
-				int iTickDiff = dwThisTick - m_dwMoveTickCount;
+				int64_t iTickDiff = dwThisTick - m_dwMoveTickCount;
 				if (iTickDiff > 0) {
-					vecNewPosition += vecVelocity * static_cast<float>(iTickDiff);
+					vecNewPosition += vecVelocity * static_cast<float>(Handle32Limit(iTickDiff));
 				}
 
 				UpdateHeightPos(&vecNewPosition);
@@ -766,7 +769,7 @@ void CPlayerData::Process()
 				} else {
 					StopPlayingNode();
 				}
-			} else if (dwMoveTick > m_dwMoveTime + m_dwMoveStopDelay) {
+			} else if (dwMoveTick > static_cast<int64_t>(m_dwMoveTime) + static_cast<int64_t>(m_dwMoveStopDelay)) {
 				StopMoving();
 
 				CVehicle *pVehicle = NULL;
@@ -920,7 +923,7 @@ void CPlayerData::Process()
 					iShootTime = static_cast<int>(m_dwShootDelay);
 				}
 
-				DWORD dwLastShootTime = dwThisTick - m_dwShootTickCount;
+				int64_t dwLastShootTime = dwThisTick - m_dwShootTickCount;
 
 				if (dwLastShootTime >= m_dwShootDelay) {
 					SetKeys(m_pPlayer->wUDAnalog, m_pPlayer->wLRAnalog, (m_pPlayer->dwKeys & ~KEY_FIRE) | KEY_AIM);
@@ -1298,7 +1301,7 @@ void CPlayerData::SetWeaponState(int iState)
 			break;
 		case WEAPONSTATE_RELOADING:
 			if (!m_bReloading) {
-				m_dwReloadTickCount = GetTickCount();
+				m_dwReloadTickCount = GetTick();
 				m_bReloading = true;
 				m_bShooting = false;
 			}
@@ -1713,7 +1716,7 @@ void CPlayerData::UpdateMovingData(CVector vecDestination, float fRadius, bool b
 	}
 	// Get the start move tick
 	m_dwMoveTickCount =
-		m_dwMoveStartTime = GetTickCount();
+		m_dwMoveStartTime = GetTick();
 	// Save the flags
 	m_vecDestination = vecDestination;
 	m_fMoveRadius = fRadius;
@@ -1804,7 +1807,7 @@ void CPlayerData::AimAt(const CVector &vecPoint, bool bShoot, int iShootDelay, b
 	// Set the aiming flag
 	if (!m_bAiming) {
 		// Get the shooting start tick
-		m_dwShootTickCount = GetTickCount();
+		m_dwShootTickCount = GetTick();
 		m_bReloading = false;
 	}
 
@@ -1937,7 +1940,7 @@ bool CPlayerData::MeleeAttack(int iTime, bool bUseFightstyle)
 	}
 
 	// Get the starting tick
-	m_dwShootTickCount = GetTickCount();
+	m_dwShootTickCount = GetTick();
 	// Set the melee flag
 	m_bMeleeAttack = true;
 	// Set the melee use fightstyle flag
@@ -2103,7 +2106,7 @@ bool CPlayerData::EnterVehicle(WORD wVehicleId, BYTE byteSeatId, int iType)
 	// Check distance
 	if (fDistance < MIN_VEHICLE_GO_TO_DISTANCE) {
 		// Wait until the entry animation is finished
-		m_dwEnterExitTickCount = GetTickCount();
+		m_dwEnterExitTickCount = GetTick();
 		m_bEntering = true;
 
 		// Check whether the player is jacking the vehicle or not
@@ -2138,7 +2141,7 @@ bool CPlayerData::ExitVehicle()
 	// Set the player state
 	SetState(PLAYER_STATE_EXIT_VEHICLE);
 	// Set the exit start tick
-	m_dwEnterExitTickCount = GetTickCount();
+	m_dwEnterExitTickCount = GetTick();
 	return true;
 }
 
@@ -2228,7 +2231,7 @@ void CPlayerData::SetVehicle(WORD wVehicleId, BYTE byteSeatId)
 	// set the vehicle params
 	pVehicle->wLastDriverID = m_wPlayerId;
 	pVehicle->bOccupied = 1;
-	pVehicle->vehOccupiedTick = GetTickCount();
+	pVehicle->vehOccupiedTick = GetTick32();
 	pVehicle->vehActive = 1;
 }
 

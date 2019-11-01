@@ -17,15 +17,12 @@ void         **ppPluginData;
 extern void  *pAMXFunctions;
 CServer      *pServer;
 bool         bServerInit = false;
-DWORD        dwStartTick;
+int64_t        dwStartTick;
 CNetGame     *pNetGame;
 void         *pConsole = NULL;
 void         *pRakServer = NULL;
 char         szSampClient[64];
 char         szSampVersion[64];
-
-// ColAndreas stuff
-bool colInit = false;
 
 PLUGIN_EXPORT unsigned int PLUGIN_CALL Supports()
 {
@@ -311,7 +308,7 @@ PLUGIN_EXPORT int PLUGIN_CALL AmxLoad(AMX *pAMX)
 			exit(0);
 		}
 		// Initialize the starting tick
-		dwStartTick = GetTickCount();
+		dwStartTick = GetTick();
 		// Set the initialized flag
 		bServerInit = true;
 	}

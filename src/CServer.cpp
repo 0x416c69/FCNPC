@@ -13,6 +13,8 @@
 extern logprintf_t logprintf;
 extern CNetGame *pNetGame;
 
+#pragma warning(push)
+#pragma warning(disable: 26495)
 CServer::CServer(eSAMPVersion version)
 {
 	m_iTicks = 0;
@@ -39,6 +41,7 @@ CServer::CServer(eSAMPVersion version)
 	// Initialize random seed
 	srand(static_cast<unsigned int>(time(NULL)));
 }
+#pragma warning(pop)
 
 CServer::~CServer()
 {

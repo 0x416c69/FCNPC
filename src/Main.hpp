@@ -96,5 +96,3 @@ extern void         *pConsole;
 extern void         *pRakServer;
 extern char         szSampVersion[64];
 extern char         szSampClient[64];
-
-extern bool colInit;

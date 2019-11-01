@@ -15,7 +15,7 @@ struct Record_t
 {
 	char szFile[MAX_PATH];
 	int iPlaybackType;
-	std::vector<DWORD> v_dwTime;
+	std::vector<int64_t> v_dwTime;
 	std::vector<CSyncData> v_playerSyncData;
 	std::vector<CVehicleSyncData> v_vehicleSyncData;
 };

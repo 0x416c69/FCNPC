@@ -30,7 +30,7 @@ public:
 private:
 	bool m_bAutoUnload;
 	int m_iRecordId;
-	DWORD m_dwStartTime;
+	int64_t m_dwStartTime;
 	bool m_bPaused;
 	Record_t m_recordData;
 	int m_iCurrentIndex;

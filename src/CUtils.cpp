@@ -9,26 +9,53 @@
   =========================================*/
 
 #include "Main.hpp"
+#include <chrono>
+#include <fstream>
 
 #if defined(WIN32)
 	#include <Psapi.h>
-#elif defined(LINUX)
-	#include "sys/time.h"
-
-	timeval startTime;
-	timeval currentTime;
-
-	void LoadTickCount()
-	{
-		gettimeofday(&startTime, 0);
-	}
-
-	int GetTickCount()
-	{
-		gettimeofday(&currentTime, 0);
-		return (currentTime.tv_usec - startTime.tv_usec) / 1000 + 1000 * (currentTime.tv_sec - startTime.tv_sec);
-	}
 #endif
+
+class Timer
+{
+public:
+    Timer() : beg_(clock_::now()) {}
+
+    void reset() { beg_ = clock_::now(); }
+    int64_t elapsed() const
+    {
+        return std::chrono::duration_cast<milisec_>
+            (clock_::now() - beg_).count();
+    }
+
+private:
+    typedef std::chrono::high_resolution_clock clock_;
+    typedef std::chrono::duration<int64_t, std::milli > milisec_;
+    std::chrono::time_point<clock_> beg_;
+};
+
+Timer theTimer;
+#define GetTickCount DONT_USE_THIS_SHIT_MAN
+int64_t GetTick()
+{
+    static bool bTimerStarted = false;
+    if (!bTimerStarted)
+    {
+        bTimerStarted = true;
+        theTimer.reset();
+    }
+    return theTimer.elapsed();
+}
+
+uint32_t Handle32Limit(int64_t number)
+{
+    return static_cast<uint32_t>(number % 0xFFFFFFFFll);
+}
+
+uint32_t GetTick32()
+{
+    return Handle32Limit(GetTick());
+}
 
 void CUtils::GetPluginError(BYTE byteError, char *szError, size_t sSize)
 {

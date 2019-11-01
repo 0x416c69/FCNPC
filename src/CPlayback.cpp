@@ -118,7 +118,7 @@ bool CPlayback::Initialize(const CVector &vecPoint, float *fQuaternion)
 		}
 	}
 
-	m_dwStartTime = GetTickCount();
+	m_dwStartTime = GetTick();
 	return true;
 }
 
@@ -135,11 +135,11 @@ bool CPlayback::Process(CPlayerData *pPlayerData)
 			pPlayerData->ResetSyncMoving(UPDATE_STATE_ONFOOT);
 		}
 		// Update the starting time
-		m_dwStartTime = (GetTickCount() - m_recordData.v_dwTime[m_iCurrentIndex]);
+		m_dwStartTime = (GetTick() - m_recordData.v_dwTime[m_iCurrentIndex]);
 		return true;
 	}
 	// Check the time
-	if ((GetTickCount() - m_dwStartTime) >= m_recordData.v_dwTime[m_iCurrentIndex]) {
+	if ((GetTick() - m_dwStartTime) >= m_recordData.v_dwTime[m_iCurrentIndex]) {
 		// Read the first recording data
 		if (m_recordData.iPlaybackType == PLAYBACK_TYPE_DRIVER) {
 			// Get the vehicle interface

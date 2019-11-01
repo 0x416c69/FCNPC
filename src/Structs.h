@@ -720,7 +720,7 @@ struct CVehicle
 	CVehicleParams	vehParamEx;			// 239 - 255
 	BYTE			bDeathNotification; // 255 - 256
 	BYTE			bOccupied;			// 256 - 257
-	DWORD			vehOccupiedTick;	// 257 - 261
+    DWORD			vehOccupiedTick;	// 257 - 261
 	DWORD			vehRespawnTick;		// 261 - 265
 	BYTE			byteSirenEnabled;	// 265 - 266
 	BYTE			byteNewSirenState;	// 266 - 267 : passed to OnVehicleSirenStateChange

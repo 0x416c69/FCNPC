@@ -26,13 +26,8 @@ public:
 	static float GetNearestFloatValue(float value, float *array, const size_t size);
 };
 
-#if defined(LINUX)
-	#if defined(GetTickCount)
-		#undef GetTickCount
-	#endif
-
-	int GetTickCount();
-	void LoadTickCount();
-#endif
+int64_t GetTick();
+uint32_t GetTick32();
+uint32_t Handle32Limit(int64_t number);
 
 #endif
