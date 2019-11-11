@@ -3147,7 +3147,7 @@ cell AMX_NATIVE_CALL CNatives::FCNPC_GetSurfingPlayerObject(AMX* amx, cell* para
     // Validate the player
     if (!pServer->GetPlayerManager()->IsPlayerConnected(wPlayerId) || wPlayerId == wNpcId)
     {
-        return 0;
+        return INVALID_OBJECT_ID;
     }
 
     // Get the surfing object
