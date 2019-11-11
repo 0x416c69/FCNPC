@@ -64,6 +64,9 @@ void CFunctions::PreInitialize()
     pfn__RakNet__Receive = reinterpret_cast<RakNet__Receive_t>(pRakServer_VTBL[RAKNET_RECEIVE_OFFSET]);
     pfn__RakNet__GetPlayerIDFromIndex = reinterpret_cast<RakNet__GetPlayerIDFromIndex_t>(pRakServer_VTBL[RAKNET_GET_PLAYERID_FROM_INDEX_OFFSET]);
     pfn__RakNet__GetIndexFromPlayerID = reinterpret_cast<RakNet__GetIndexFromPlayerID_t>(pRakServer_VTBL[RAKNET_GET_INDEX_FROM_PLAYERID_OFFSET]);
+
+    // Hooks
+    pRakServer_VTBL[RAKNET_SEND_OFFSET] = reinterpret_cast<int>(SendHook);
 }
 
 WORD CFunctions::GetFreePlayerSlot()
@@ -921,6 +924,108 @@ WORD CFunctions::GetClosestMapPointInBetween(const CVector& vecHitOrigin, const 
     }
 
     return wClosestMapPoint;
+}
+
+bool THISCALL CFunctions::SendHook(void* ppRakServer, RakNet::BitStream* parameters, PacketPriority priority, PacketReliability reliability, unsigned orderingChannel, PlayerID playerId, bool broadcast)
+{
+    if (!broadcast) // Sync packets are not broadcasted
+    {
+        BYTE id;
+        parameters->Read(id);
+        if (id == ID_PLAYER_SYNC)
+        {
+            WORD playerid;
+            parameters->Read(playerid);
+            if (pServer->GetPlayerManager()->IsNpcConnected(playerid)) // if it's our NPC
+            {
+                WORD wPlayerId = static_cast<WORD>(GetIndexFromPlayerID(playerId));
+                auto playerData = pServer->GetPlayerManager()->GetAt(playerid);
+                WORD wObjectId = playerData->GetSurfingPlayerObject(wPlayerId);
+                if (wObjectId != INVALID_OBJECT_ID && wObjectId > 0 && wObjectId < MAX_OBJECTS && pNetGame->pObjectPool->bPlayerObjectSlotState[wPlayerId][wObjectId])
+                {
+                    auto object = pNetGame->pObjectPool->pPlayerObjects[wPlayerId][wObjectId];
+                    if (object)
+                    {
+                        // Specialize this packet for this playa
+                        RakNet::BitStream bs(parameters->GetData(), parameters->GetNumberOfBytesUsed(), true);
+                        CSyncData* data = reinterpret_cast<CSyncData*>(&bs.GetData()[1]);
+                        CVector vecPos, vecOffsets;
+
+                        playerData->GetSurfingOffsets(&vecOffsets);
+                        data->wSurfingInfo = MAX_VEHICLES + wObjectId;
+                        if (object->wAttachedObjectID != INVALID_OBJECT_ID)
+                        {
+                            vecPos = object->vecAttachedOffset + pNetGame->pObjectPool->pObjects[object->wAttachedObjectID]->matWorld.pos;
+                        }
+                        else if (object->wAttachedVehicleID != INVALID_VEHICLE_ID)
+                        {
+                            vecPos = object->vecAttachedOffset + pNetGame->pVehiclePool->pVehicle[object->wAttachedVehicleID]->vecPosition;
+                        }
+                        else
+                        {
+                            vecPos = object->matWorld.pos;
+                        }
+                        data->vecPosition = vecPos + vecOffsets;
+
+                        if (playerData->IsAiming() && playerData->GetAimSetAngle())
+                        {
+                            float fzAngle;
+                            CPlayerData::CalculatAimingFacingAngle(data->vecPosition, playerData->GetAimingAtOffset(), fzAngle);
+                            CPlayerData::GetQuatFromZAngle(fzAngle, data->fQuaternion);
+                        }
+
+                        return pfn__RakNet__Send(ppRakServer, &bs, priority, reliability, orderingChannel, playerId, broadcast);
+                    }
+                }
+            }
+        }
+        else if (id == ID_AIM_SYNC)
+        {
+            WORD playerid;
+            parameters->Read(playerid);
+            if (pServer->GetPlayerManager()->IsNpcConnected(playerid)) // if it's our NPC
+            {
+                WORD wPlayerId = static_cast<WORD>(GetIndexFromPlayerID(playerId));
+                auto playerData = pServer->GetPlayerManager()->GetAt(playerid);
+                WORD wObjectId = playerData->GetSurfingPlayerObject(wPlayerId);
+                if (playerData->IsAiming() && wObjectId != INVALID_OBJECT_ID && wObjectId > 0 && wObjectId < MAX_OBJECTS && pNetGame->pObjectPool->bPlayerObjectSlotState[wPlayerId][wObjectId])
+                {
+                    auto object = pNetGame->pObjectPool->pPlayerObjects[wPlayerId][wObjectId];
+                    if (object)
+                    {
+                        // Specialize this packet for this playa
+                        RakNet::BitStream bs(parameters->GetData(), parameters->GetNumberOfBytesUsed(), true);
+                        CAimSyncData* data = reinterpret_cast<CAimSyncData*>(&bs.GetData()[1]);
+                        CVector vecPos, vecOffsets;
+
+                        playerData->GetSurfingOffsets(&vecOffsets);
+                        if (object->wAttachedObjectID != INVALID_OBJECT_ID)
+                        {
+                            vecPos = object->vecAttachedOffset + pNetGame->pObjectPool->pObjects[object->wAttachedObjectID]->matWorld.pos;
+                        }
+                        else if (object->wAttachedVehicleID != INVALID_VEHICLE_ID)
+                        {
+                            vecPos = object->vecAttachedOffset + pNetGame->pVehiclePool->pVehicle[object->wAttachedVehicleID]->vecPosition;
+                        }
+                        else
+                        {
+                            vecPos = object->matWorld.pos;
+                        }
+
+                        vecPos += vecOffsets;
+
+                        // Update aim data relative to the position
+                        float dummy;
+                        CPlayerData::CalculatAimingData(vecPos, playerData->GetAimingAtOffset(), false, dummy, data->fZAim, data->vecFront);
+                        data->vecPosition = vecPos;
+
+                        return pfn__RakNet__Send(ppRakServer, &bs, priority, reliability, orderingChannel, playerId, broadcast);
+                    }
+                }
+            }
+        }
+    }
+    return pfn__RakNet__Send(ppRakServer, parameters, priority, reliability, orderingChannel, playerId, broadcast);
 }
 
 #pragma pack(push, 1)

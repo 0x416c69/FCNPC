@@ -18,6 +18,7 @@
 #include "CNode.hpp"
 #include "CWeaponInfo.hpp"
 #include <stdio.h>
+#include <map>
 
 class CPlayback;
 struct CPlayer;
@@ -65,6 +66,7 @@ public:
     void GetPosition(CVector* pvecPosition);
     void UpdateHeightPos(CVector* pvecPosition);
     void SetQuaternion(float* fQuaternion);
+    static void GetQuatFromZAngle(float fAngle, float* result);
     void GetQuaternion(float* fQuaternion);
     void SetAngle(float fAngle);
     float GetAngle();
@@ -150,6 +152,8 @@ public:
 
     void AimAt(const CVector& vecPoint, bool bShoot, int iShootDelay, bool bSetAngle, const CVector& vecOffsetFrom, int iMode, BYTE byteBetweenCheckFlags);
     void AimAtPlayer(WORD wHitId, bool bShoot, int iShootDelay, bool bSetAngle, const CVector& vecOffset, const CVector& vecOffsetFrom, int iMode, BYTE byteBetweenCheckFlags);
+    static void CalculatAimingFacingAngle(const CVector& vecPosition, const CVector& vecPoint, float& result);
+    static void CalculatAimingData(const CVector& vecPosition, const CVector& vecPoint, bool bSetAngle, float& zAngle, float& zAim, CVector& front);
     void UpdateAimingData(const CVector& vecPoint, bool bSetAngle);
     void StopAim();
     bool MeleeAttack(int iTime, bool bUseFightstyle);
@@ -160,6 +164,8 @@ public:
     WORD GetAimingPlayer();
     bool IsShooting();
     bool IsReloading();
+    bool GetAimSetAngle();
+    CVector GetAimingAtOffset();
 
     void ProcessDamage(WORD wDamagerId, float fHealthLoss, BYTE byteWeaponId, int iBodypart);
     void ProcessVehicleDamage(WORD wDamagerId, WORD wVehicleId, BYTE byteWeaponId, const CVector& vecHit);
@@ -192,8 +198,8 @@ public:
     int GetSurfingVehicle();
     void SetSurfingObject(WORD wObjectId);
     int GetSurfingObject();
-    void SetSurfingPlayerObject(WORD wObjectId);
-    int GetSurfingPlayerObject();
+    void SetSurfingPlayerObject(WORD wPlayerId, WORD wObjectId);
+    WORD GetSurfingPlayerObject(WORD wPlayerId);
     void StopSurfing();
 
     bool StartPlayingPlayback(char* szFile, int iRecordId, bool bAutoUnload, const CVector& vecPoint, float* fQuaternion);
@@ -281,6 +287,7 @@ private:
     CPlayer* m_pPlayer;
     CVector m_vecSurfing;
     WORD m_wSurfingInfo;
+    std::map<WORD, WORD> m_wSurfingObjectPlayer;
     CWeaponInfo* m_pWeaponInfo;
     WORD m_wMoveId;
     int m_iMovePath;

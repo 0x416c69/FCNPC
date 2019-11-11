@@ -1263,16 +1263,23 @@ void CPlayerData::GetQuaternion(float* fQuaternion)
     }
 }
 
+void CPlayerData::GetQuatFromZAngle(float fAngle, float* result)
+{
+    // Rotate new quaternion matrix
+    MATRIX4X4 matrix;
+
+    CMath::QuaternionRotateZ(&matrix, CMath::DegreeToRadians(fAngle));
+    CMath::GetQuaternionFromMatrix(matrix, result);
+}
+
 void CPlayerData::SetAngle(float fAngle)
 {
     // Set the player
     m_pPlayer->fAngle = fAngle;
-    // Rotate new quaternion matrix
-    MATRIX4X4 matrix;
-    float* fQuaternion = new float[4];
 
-    CMath::QuaternionRotateZ(&matrix, CMath::DegreeToRadians(fAngle));
-    CMath::GetQuaternionFromMatrix(matrix, fQuaternion);
+    float* fQuaternion = new float[4];
+    GetQuatFromZAngle(fAngle, fQuaternion);
+    
     // Update quaternion
     SetQuaternion(fQuaternion);
 
@@ -2109,10 +2116,22 @@ void CPlayerData::AimAtPlayer(WORD wHitId, bool bShoot, int iShootDelay, bool bS
     m_vecAimOffset = vecOffset;
 }
 
-void CPlayerData::UpdateAimingData(const CVector& vecPoint, bool bSetAngle)
+void CPlayerData::CalculatAimingFacingAngle(const CVector& vecPosition, const CVector& vecPoint, float& result)
 {
-    // Adjust the player position
-    CVector vecPosition = m_pPlayer->vecPosition + m_vecAimOffsetFrom;
+    // Get the aiming distance
+    CVector vecDistance = vecPoint - vecPosition;
+
+    // Get the distance to the destination point
+    float fDistance = CMath::GetDistanceBetween3DPoints(vecPosition, vecPoint);
+
+    // Get the destination angle
+    vecDistance /= fDistance;
+
+    result = CMath::GetAngle(vecDistance.fX, vecDistance.fY);
+}
+
+void CPlayerData::CalculatAimingData(const CVector& vecPosition, const CVector& vecPoint, bool bSetAngle, float& zAngle, float& zAim, CVector& front)
+{
     // Get the aiming distance
     CVector vecDistance = vecPoint - vecPosition;
     // Get the distance to the destination point
@@ -2144,13 +2163,25 @@ void CPlayerData::UpdateAimingData(const CVector& vecPoint, bool bSetAngle)
 
     if (bSetAngle)
     {
-        SetAngle(CMath::GetAngle(vecDistance.fX, vecDistance.fY));
+        zAngle = CMath::GetAngle(vecDistance.fX, vecDistance.fY);
     }
 
     // Set the aim sync data
-    m_pPlayer->aimSyncData.fZAim = fZAngle;
-    m_pPlayer->aimSyncData.vecFront = vecDistance;
-    m_pPlayer->aimSyncData.vecPosition = vecPosition;
+    zAim = fZAngle;
+    front = vecDistance;
+}
+
+void CPlayerData::UpdateAimingData(const CVector& vecPoint, bool bSetAngle)
+{
+    float fFacingAngle;
+    CVector vecPos = m_pPlayer->vecPosition + m_vecAimOffsetFrom;
+    CalculatAimingData(vecPos, vecPoint, bSetAngle, fFacingAngle, m_pPlayer->aimSyncData.fZAim, m_pPlayer->aimSyncData.vecFront);
+    m_pPlayer->aimSyncData.vecPosition = vecPos;
+
+    if (bSetAngle)
+    {
+        SetAngle(fFacingAngle);
+    }
 
     // set the flags
     m_vecAimAt = vecPoint;
@@ -2276,6 +2307,24 @@ bool CPlayerData::IsShooting()
 bool CPlayerData::IsReloading()
 {
     return m_bReloading;
+}
+
+bool CPlayerData::GetAimSetAngle()
+{
+    return m_bAimSetAngle;
+}
+
+CVector CPlayerData::GetAimingAtOffset()
+{
+    if (pServer->GetPlayerManager()->IsPlayerConnected(m_wHitId) && IsAimingAtPlayer(m_wHitId))
+    {
+        CPlayer* pPlayer = pNetGame->pPlayerPool->pPlayer[m_wHitId];
+        if (pPlayer)
+        {
+            return pPlayer->vecPosition + m_vecAimOffset;
+        }
+    }
+    return m_vecAimAt;
 }
 
 void CPlayerData::ProcessDamage(WORD wDamagerId, float fHealthLoss, BYTE byteWeaponId, int iBodypart)
@@ -2672,29 +2721,22 @@ int CPlayerData::GetSurfingObject()
     return INVALID_OBJECT_ID;
 }
 
-void CPlayerData::SetSurfingPlayerObject(WORD wObjectId)
+void CPlayerData::SetSurfingPlayerObject(WORD wPlayerId, WORD wObjectId)
 {
-    m_wSurfingInfo = MAX_VEHICLES + wObjectId;
-    pNetGame->pObjectPool->bPlayerObjectSlotState[m_wPlayerId][wObjectId] = true;
+    m_wSurfingObjectPlayer[wPlayerId] = wObjectId;
 }
 
-int CPlayerData::GetSurfingPlayerObject()
+WORD CPlayerData::GetSurfingPlayerObject(WORD wPlayerId)
 {
-    WORD wObjectId = m_wSurfingInfo - MAX_VEHICLES;
-    if (wObjectId > 0 && wObjectId < MAX_OBJECTS)
-    {
-        if (pNetGame->pObjectPool->bPlayerObjectSlotState[m_wPlayerId][wObjectId])
-        {
-            return wObjectId;
-        }
-    }
-    return INVALID_OBJECT_ID;
+    auto k = m_wSurfingObjectPlayer.find(wPlayerId);
+    return (k == m_wSurfingObjectPlayer.end() ? INVALID_OBJECT_ID : (*k).second);
 }
 
 void CPlayerData::StopSurfing()
 {
     m_wSurfingInfo = 0;
     m_vecSurfing = CVector(0.0f, 0.0f, 0.0f);
+    m_wSurfingObjectPlayer.clear();
 }
 
 bool CPlayerData::StartPlayingPlayback(char* szFile, int iRecordId, bool bAutoUnload, const CVector& vecPoint, float* fQuaternion)

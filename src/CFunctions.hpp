@@ -88,6 +88,7 @@ private:
     static WORD GetClosestObjectInBetween(const CVector& vecHitOrigin, const CVector& vecHitTarget, float fRange, float& fDistance, int iMode);
     static WORD GetClosestPlayerObjectInBetween(const CVector& vecHitOrigin, const CVector& vecHitTarget, float fRange, float& fDistance, WORD wOwnerId, int iMode);
     static WORD GetClosestMapPointInBetween(const CVector& vecHitOrigin, const CVector& vecHitTarget, float fRange, float& fDistance, CVector& vecHitMap, int iMode);
+    static bool THISCALL SendHook(void* ppRakServer, RakNet::BitStream* parameters, PacketPriority priority, PacketReliability reliability, unsigned orderingChannel, PlayerID playerId, bool broadcast);
 
 };
 
